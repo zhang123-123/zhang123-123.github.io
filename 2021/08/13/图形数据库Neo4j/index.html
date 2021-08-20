@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-minimal.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhang123-123.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 什么是图形数据库？ Graph database 是用来存储图结构的数据库。图形数据库是NoSQL数据库的一种类型。应用图形理论存储实体之间的关系信息。常见例子：社会网络中人与人之间的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图形数据库">
+<meta property="og:url" content="https://zhang123-123.github.io/2021/08/13/%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93Neo4j/index.html">
+<meta property="og:site_name" content="XiaoPang の Blog">
+<meta property="og:description" content="1. 什么是图形数据库？ Graph database 是用来存储图结构的数据库。图形数据库是NoSQL数据库的一种类型。应用图形理论存储实体之间的关系信息。常见例子：社会网络中人与人之间的关系。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-13T01:40:00.000Z">
+<meta property="article:modified_time" content="2021-08-16T10:51:34.102Z">
+<meta property="article:author" content="XiaoPang">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="neo4j">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zhang123-123.github.io/2021/08/13/%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93Neo4j/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>图形数据库 | XiaoPang の Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">XiaoPang の Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+    <script src="https://v1.hitokoto.cn/?c=f&encode=js&select=%23hitokoto" defer></script>
+
+      <p class="site-subtitle" itemprop="description" id="hitokoto"><span id="hitokoto_text">记录生活中的点点滴滴</span></p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhang123-123.github.io/2021/08/13/%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93Neo4j/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XiaoPang">
+      <meta itemprop="description" content="少说，多做">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XiaoPang の Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图形数据库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于：</span>
+
+              <time title="创建时间：2021-08-13 09:40:00" itemprop="dateCreated datePublished" datetime="2021-08-13T09:40:00+08:00">2021-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于：</span>
+                <time title="修改时间：2021-08-16 18:51:34" itemprop="dateModified" datetime="2021-08-16T18:51:34+08:00">2021-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Nosql/" itemprop="url" rel="index"><span itemprop="name">Nosql</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <br>
+            <span class="post-meta-item" title="本文字数">
+            <span class="post-meta-item-icon">
+            <i class="fa fa-file-word"></i>
+            </span>
+           <span class="post-meta-item-text">本文字数：</span>
+           <span title="post.wordcount">
+                2.7k 字
+            </span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+            <span class="post-meta-item-icon">
+            <i class="fa fa-clock"></i>
+            </span>
+          <span class="post-meta-item-text">阅读时长：</span>
+           <span title="post.min2read">
+                12 分钟
+            </span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-什么是图形数据库？"><a href="#1-什么是图形数据库？" class="headerlink" title="1. 什么是图形数据库？"></a>1. 什么是图形数据库？</h2><ul>
+<li><code>Graph database</code> 是用来存储图结构的数据库。图形数据库是<code>NoSQL</code>数据库的一种类型。应用图形理论存储实体之间的关系信息。常见例子：社会网络中人与人之间的关系。<span id="more"></span></li>
+<li>应用场景：<ul>
+<li>社交领域：Facebook、Twitter用来管理社交关系，实现好友推荐；</li>
+<li>零售领域：eBay、沃尔玛，用于实现商品实时推荐；  </li>
+<li>金融领域：摩根大通、花旗等银行用来做风控处理；</li>
+<li>电信领域：依靠图数据库管理网络；</li>
+<li>酒店领域：万豪、雅高酒店等公司使用图数据库来管理复杂且快速变化的库存。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-neo4j-应用"><a href="#2-neo4j-应用" class="headerlink" title="2. neo4j 应用"></a>2. <code>neo4j</code> 应用</h2><h3 id="2-1-概念介绍"><a href="#2-1-概念介绍" class="headerlink" title="2.1 概念介绍"></a>2.1 概念介绍</h3><ul>
+<li>节点：表示一个实体记录，相当于关系型数据库中的一条记录</li>
+<li>关系：用于将节点关联起来构建图，简称为图论的边</li>
+<li>属性：节点和关系可以有多个属性，属性是有键值对组成，相当于Python中的字典</li>
+<li>标签：表示一组拥有相同属性的节点，相当于关系型数据库的表</li>
+<li>路径：图中任意两个节点存在关系组成的路径</li>
+</ul>
+<h3 id="2-2-Cypher-查询语言"><a href="#2-2-Cypher-查询语言" class="headerlink" title="2.2 Cypher 查询语言"></a>2.2 <code>Cypher</code> 查询语言</h3><ul>
+<li><code>Cypher</code> 是一种声明式图数据库查询语言，类似于关系型数据库中的SQL。</li>
+<li>MATCH：匹配图模式</li>
+<li>WHERE：过滤条件</li>
+<li>RETURN：定义返回的结果</li>
+</ul>
+<p>基本语法</p>
+<ul>
+<li>增（CREATE）</li>
+<li>删（DELETE）</li>
+<li>改（SET）</li>
+<li>查（MATCH）</li>
+</ul>
+<h3 id="2-4-用法举例"><a href="#2-4-用法举例" class="headerlink" title="2.4 用法举例"></a>2.4 用法举例</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 创建基础节点</span><br><span class="line"><span class="keyword">CREATE</span> (:pig&#123;name: &quot;猪爷爷&quot;, age: <span class="number">15</span>&#125;), (:pig&#123;name: &quot;猪奶奶&quot;, age: <span class="number">13</span>&#125;)</span><br><span class="line"></span><br><span class="line"># 基于已存在节点创建关系</span><br><span class="line"><span class="keyword">MATCH</span> (a:pig&#123;name: &quot;猪爷爷&quot;&#125;) <span class="keyword">MATCH</span> (b: pig&#123;name: &quot;猪奶奶&quot;&#125;) <span class="keyword">CREATE</span> (a) <span class="operator">-</span> [r: &quot;夫妻&quot;] <span class="operator">-</span><span class="operator">&gt;</span> (b)</span><br><span class="line"></span><br><span class="line"># 添加节点时创建关系</span><br><span class="line"><span class="keyword">CREATE</span> (:pig&#123;name: &quot;猪爸爸&quot;, age: <span class="number">12</span>&#125;) <span class="operator">-</span> [:夫妻] <span class="operator">-</span><span class="operator">&gt;</span> (:pig&#123;name: &quot;猪妈妈&quot;, age: <span class="number">9</span>&#125;)</span><br><span class="line"></span><br><span class="line"># 修改属性</span><br><span class="line"><span class="keyword">MATCH</span> (a: pig&#123;name: &quot;猪爸爸&quot;, age: <span class="number">12</span>&#125;) <span class="keyword">set</span> a.age<span class="operator">=</span><span class="number">10</span></span><br><span class="line"></span><br><span class="line"># 创建多标签节点</span><br><span class="line"><span class="keyword">CREATE</span> (a: pig: die&#123;name: &quot;猪祖父&quot;, age: <span class="number">15</span>&#125;) <span class="keyword">return</span> a.name</span><br><span class="line"></span><br><span class="line"># 删除节点</span><br><span class="line"><span class="keyword">MATCH</span> (n: die) <span class="keyword">delete</span> n</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Neo4j-CQL"><a href="#3-Neo4j-CQL" class="headerlink" title="3. Neo4j CQL"></a>3. <code>Neo4j CQL</code></h2><h3 id="3-1-CQL-命令、介绍"><a href="#3-1-CQL-命令、介绍" class="headerlink" title="3.1 CQL 命令、介绍"></a>3.1 <code>CQL</code> 命令、介绍</h3><table>
+<thead>
+<tr>
+<th><code>CQL</code> 命令</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CREATE</td>
+<td>创建节点、关系、属性</td>
+</tr>
+<tr>
+<td>MATCH</td>
+<td>检索有关节点、关系、属性数据</td>
+</tr>
+<tr>
+<td>RETURN</td>
+<td>返回查询条件</td>
+</tr>
+<tr>
+<td>WHERE</td>
+<td>提供条件过滤检索数据</td>
+</tr>
+<tr>
+<td>REMOVE</td>
+<td>删除节点和关系属性</td>
+</tr>
+<tr>
+<td>ORDER BY</td>
+<td>排序检索数据</td>
+</tr>
+<tr>
+<td>SET</td>
+<td>添加或更新标签</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>String</td>
+<td>用于使用String</td>
+</tr>
+<tr>
+<td>Aggregation</td>
+<td>用于对<code>CQL</code>查询结果执行一些聚合操作</td>
+</tr>
+<tr>
+<td>Relationship</td>
+<td>用于获取关系的细节</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-CQL-数据类型"><a href="#3-2-CQL-数据类型" class="headerlink" title="3.2 CQL 数据类型"></a>3.2 <code>CQL</code> 数据类型</h3><ol>
+<li><code>boolean</code> 表示：布尔文字（true, false）</li>
+<li><code>byte</code> 表示八位整数；</li>
+<li><code>short</code> 表示十六位整数；</li>
+<li><code>int</code> 表示三十二位整数；</li>
+<li><code>long</code> 表示六十四位整数；</li>
+<li><code>float</code> 表示三十二位浮点数；</li>
+<li><code>double</code> 表示六十四位浮点数；</li>
+<li><code>char</code> 表示十六位字符；</li>
+<li><code>String</code> 表示字符串。</li>
+</ol>
+<h3 id="3-2-CREATE-使用"><a href="#3-2-CREATE-使用" class="headerlink" title="3.2 CREATE 使用"></a>3.2 CREATE 使用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># CREATE 创建节点、属性</span><br><span class="line">CREATE (</span><br><span class="line">	&lt;node-name&gt;: &lt;label-name&gt;</span><br><span class="line">	&#123;</span><br><span class="line">		&lt;Property1-name&gt;: &lt;Propertyn-name&gt;</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">&lt;node-name&gt; 节点名称；</span><br><span class="line">&lt;label-name&gt; 标签名称（相当于数据库表名）</span><br><span class="line">&lt;Property1-name&gt;: &lt;Propertyn-name&gt; 属性，键值对</span><br><span class="line"># 举例：</span><br><span class="line">create (emp: Employee&#123;id: 110, name: &quot;zhangsan&quot;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-MATCH-命令"><a href="#3-3-MATCH-命令" class="headerlink" title="3.3 MATCH 命令"></a>3.3 MATCH 命令</h3><ul>
+<li>从数据库中获取有关节点、关系、属性数据。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 第一种</span><br><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">	&#123;</span><br><span class="line">		key: value</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">RETURN &lt;node_name&gt;</span><br><span class="line"># 第二种</span><br><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">RETURN &lt;node_name&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-DELETE-命令"><a href="#3-4-DELETE-命令" class="headerlink" title="3.4 DELETE 命令"></a>3.4 <code>DELETE</code> 命令</h3></li>
+<li>删除节点或相关节点和关系，需要与MATCH 相结合。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">DELETE &lt;node_name&gt;</span><br><span class="line"># 例：</span><br><span class="line">match (a:Employee) where a.name=&quot;zhangsan&quot; delete a</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-5-REMOVE-删除"><a href="#3-5-REMOVE-删除" class="headerlink" title="3.5 REMOVE 删除"></a>3.5 <code>REMOVE</code> 删除</h3><ul>
+<li>删除节点或关系的属性<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># DELETE/REMOVE 这两个命令不应单独使用。</span><br><span class="line"># 两个命令都应该与MATCH命令一起使用。</span><br><span class="line"># 查询删除指定的属性</span><br><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">REMOVE &lt;node_name&gt;.key*</span><br><span class="line"></span><br><span class="line"># 例：删除属性是张三对应的年龄属性</span><br><span class="line">match (a:Employee) where a.name=&quot;zhangsan&quot; remove a.age</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-6-SET-子句"><a href="#3-6-SET-子句" class="headerlink" title="3.6 SET 子句"></a>3.6 <code>SET</code> 子句</h3><ol>
+<li>用于对现有节点或关系添加属性 </li>
+<li>更新属性值</li>
+</ol>
+<ul>
+<li>SET应该与MATCH命令一起使用<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">SET &lt;node_name&gt;.key1 = value1</span><br><span class="line"></span><br><span class="line"># 例：给属性是张三修改年龄属性值</span><br><span class="line">match (a:Employee) where a.name=&quot;zhangsan&quot; set a.age=10</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-7-ORDER-BY-排序"><a href="#3-7-ORDER-BY-排序" class="headerlink" title="3.7 ORDER BY 排序"></a>3.7 <code>ORDER BY</code> 排序</h3><ul>
+<li>默认情况下，是按升序排列；添加<code>DESC</code>关键字，按降序进行排序。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">RETURN &lt;node_name&gt;</span><br><span class="line">ORDER BY &lt;node_name&gt;.key1</span><br><span class="line"></span><br><span class="line"># 例：查询name为张三，返回结果按对应年龄升序排序</span><br><span class="line">match (a:Employee) where a.name=&quot;zhangsan&quot; return a order by a.name </span><br></pre></td></tr></table></figure>
+<h3 id="3-8-UNION-合并"><a href="#3-8-UNION-合并" class="headerlink" title="3.8 UNION 合并"></a>3.8 <code>UNION</code> 合并</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># UNION | UNION ALL</span><br><span class="line">error：All sub queries in an UNION must have the same column names。</span><br><span class="line">UNION 中的所有子查询必须具有相同的列名。</span><br><span class="line">例：</span><br><span class="line">match (a:Employee) return a.age as age, a.name as name union match (b:Employee1) return b.age as age, b.name as name</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-9-SKIP-LIMIT-子句"><a href="#3-9-SKIP-LIMIT-子句" class="headerlink" title="3.9 SKIP/LIMIT 子句"></a>3.9 <code>SKIP/LIMIT</code> 子句</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># LIMIT 子句</span><br><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">RETURN &lt;node_name&gt;</span><br><span class="line">LIMIT number</span><br><span class="line"># skip 子句</span><br><span class="line">MATCH (</span><br><span class="line">	&lt;node_name&gt;: &lt;label_name&gt;</span><br><span class="line">)</span><br><span class="line">WHERE &lt;node_name&gt;.key = value</span><br><span class="line">RETURN &lt;node_name&gt;</span><br><span class="line">SKIP number</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-10-CQL-合并"><a href="#3-10-CQL-合并" class="headerlink" title="3.10 CQL 合并"></a>3.10 <code>CQL</code> 合并</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MERGE = CREATE + MATCH</span><br><span class="line"># MERGE 命令在图中搜索给定模式。如果存在，则返回结果；如果不存在图数据库中，则创建新的节点、关系并返回结果。</span><br><span class="line">MERGE (</span><br><span class="line">	&lt;node-name&gt;: &lt;label-name&gt;</span><br><span class="line">	&#123;</span><br><span class="line">		&lt;Property1-name&gt;: &lt;Propertyn-name&gt;</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">RETURN &lt;node-name&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-11-IN-操作符"><a href="#3-11-IN-操作符" class="headerlink" title="3.11 IN 操作符"></a>3.11 <code>IN</code> 操作符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MATCH (&lt;node-name&gt;: &lt;label-name&gt;)</span><br><span class="line">WHERE &lt;node-name&gt;.key in [value1, value2]</span><br><span class="line">RETURN &lt;node-name&gt;</span><br><span class="line"></span><br><span class="line"># 例：查询名字是zhangsan/lisi</span><br><span class="line">match (a:Employee) where a.name in [&quot;zhangsan&quot;, &quot;lisi&quot;] return a</span><br></pre></td></tr></table></figure>
+<h3 id="3-12-图形字体样式"><a href="#3-12-图形字体样式" class="headerlink" title="3.12 图形字体样式"></a>3.12 图形字体样式</h3><h2 id="4-Python-操作-neo4j"><a href="#4-Python-操作-neo4j" class="headerlink" title="4 Python 操作 neo4j"></a>4 <code>Python</code> 操作 <code>neo4j</code></h2><h3 id="4-1-安装模块"><a href="#4-1-安装模块" class="headerlink" title="4.1 安装模块"></a>4.1 安装模块</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install py2neo</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-Node-和-Relationship-对象"><a href="#4-2-Node-和-Relationship-对象" class="headerlink" title="4.2 Node 和 Relationship 对象"></a>4.2 <code>Node</code> 和 <code>Relationship</code> 对象</h3><h4 id="4-2-1-创建节点，关系对象"><a href="#4-2-1-创建节点，关系对象" class="headerlink" title="4.2.1 创建节点，关系对象"></a>4.2.1 创建节点，关系对象</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模块导入</span></span><br><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> Node, Relationship</span><br><span class="line"><span class="comment"># 创建节点对象</span></span><br><span class="line"><span class="comment"># Node(标签, **属性)</span></span><br><span class="line"><span class="comment"># Node(&quot;Person_1&quot;, name=&quot;zhangsan&quot;, age=20)</span></span><br><span class="line"><span class="comment"># 创建节点对应标签是Person_1，其中有两个属性name，age</span></span><br><span class="line">a = Node(<span class="string">&quot;Person_1&quot;</span>, name=<span class="string">&quot;zhangsan&quot;</span>)</span><br><span class="line">b = Node(<span class="string">&quot;Person_1&quot;</span>, name=<span class="string">&quot;lisi&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;a：<span class="subst">&#123;a&#125;</span>&quot;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b：<span class="subst">&#123;b&#125;</span>&quot;</span>)  </span><br><span class="line"><span class="comment"># 创建a, b节点关系对象</span></span><br><span class="line">ab = Relationship(a, <span class="string">&quot;friend&quot;</span>, b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;ab：<span class="subst">&#123;ab&#125;</span>&quot;</span>)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">a：(:Person_1 &#123;name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="string">b：(:Person_1 &#123;name: &#x27;lisi&#x27;&#125;)</span></span><br><span class="line"><span class="string">ab：(zhangsan)-[:friend &#123;&#125;]-&gt;(lisi)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-2-Node节点对象操作"><a href="#4-2-2-Node节点对象操作" class="headerlink" title="4.2.2 Node节点对象操作"></a>4.2.2 <code>Node</code>节点对象操作</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 判断节点是否相等，即节点对应ID是否相等</span></span><br><span class="line">node_1 == node_2</span><br><span class="line"><span class="comment"># 2. 查看节点对象hash值</span></span><br><span class="line"><span class="built_in">hash</span>(node_1)</span><br><span class="line"><span class="comment"># 3. 查看节点属性值</span></span><br><span class="line">node_1[key]</span><br><span class="line"><span class="comment"># 4. 添加/修改节点属性</span></span><br><span class="line">nede_1[key] = value</span><br><span class="line"><span class="comment"># 5. 删除节点属性，注意：如果属性key不存在，则报错。KeyError</span></span><br><span class="line"><span class="keyword">del</span> node_1[key]</span><br><span class="line"><span class="comment"># 6. 查看node上的属性长度</span></span><br><span class="line"><span class="built_in">len</span>(node_1)</span><br><span class="line"><span class="comment"># 7. 将node上的属性值按dict输出</span></span><br><span class="line"><span class="built_in">dict</span>(node_1)</span><br><span class="line"><span class="comment"># 8. 返回yield 节点</span></span><br><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> walk</span><br><span class="line">walk(node_1)</span><br><span class="line"><span class="comment"># node_1：(:Person_1 &#123;age: 20, name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="comment"># walk(node_1)：&lt;generator object Path.walk at 0x0000027F1580B510&gt;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> walk(node_1):  </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;111&quot;</span>, i)</span><br><span class="line"><span class="comment"># 111 (:Person_1 &#123;age: 20, name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="comment"># 9. 返回节点对应标签</span></span><br><span class="line">node_1.labels</span><br><span class="line"><span class="comment"># 10. 判断节点是否具有特定标签</span></span><br><span class="line">node_1.has_label(<span class="string">&quot;标签名&quot;</span>)</span><br><span class="line"><span class="comment"># 11. 给节点添加标签</span></span><br><span class="line">node_1.add_label(<span class="string">&quot;标签名&quot;</span>)</span><br><span class="line"><span class="comment"># 12. 给节点添加多个标签</span></span><br><span class="line">node_1.update_labels([<span class="string">&quot;标签1&quot;</span>, <span class="string">&quot;标签2&quot;</span>, <span class="string">&quot;标签3&quot;</span>])</span><br><span class="line"><span class="comment"># 13. 节点标签移除。有对应标签直接移除；没有对应标签节点不做操作</span></span><br><span class="line">node_1.remove_label(<span class="string">&quot;标签名&quot;</span>)</span><br><span class="line"><span class="comment"># 14. 清除节点所有标签</span></span><br><span class="line">node_1.clear_label()</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-3-Relationship-节点关系对象"><a href="#4-2-3-Relationship-节点关系对象" class="headerlink" title="4.2.3 Relationship 节点关系对象"></a>4.2.3 <code>Relationship</code> 节点关系对象</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">start_node: 开始节点对象</span></span><br><span class="line"><span class="string">type: 关系类型。如：（朋友，夫妻，父子等）</span></span><br><span class="line"><span class="string">end_node: 结束节点对象</span></span><br><span class="line"><span class="string">关系对象创建方法：</span></span><br><span class="line"><span class="string">from py2neo import Relationship</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. Relationship(start_node, type, end_node, **属性键值对)</span></span><br><span class="line"><span class="string">2. Relationship(start_node, end_node, **属性键值对)</span></span><br><span class="line"><span class="string">3. Relationship(start_node, type, **属性键值对)</span></span><br><span class="line"><span class="string">4. Relationship(start_node, **属性键值对)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果没有指定关系类型，默认关系类型是 Relationship。可以通过继承Relationship类覆盖默认值。</span></span><br><span class="line"><span class="string">例：</span></span><br><span class="line"><span class="string">class WorksWith(Relationship):</span></span><br><span class="line"><span class="string">    pass</span></span><br><span class="line"><span class="string"># 以这个类创建关系对象，默认关系类型是 WorksWith。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 关系对象操作</span></span><br><span class="line"><span class="comment"># 1. 判断关系是否相等 ==</span></span><br><span class="line"><span class="comment"># 2. 关系对象hash值</span></span><br><span class="line"><span class="built_in">hash</span>(relationship_1)</span><br><span class="line"><span class="comment"># 3. 查看关系属性值</span></span><br><span class="line">relationship_1[key]</span><br><span class="line"><span class="comment"># 4. 添加/修改关系对象属性</span></span><br><span class="line">relationship_1[key] = value</span><br><span class="line"><span class="comment"># 5. 删除关系对象属性，注意：如果属性key不存在，则报错。KeyError</span></span><br><span class="line"><span class="keyword">del</span> relationship_1[key]</span><br><span class="line"><span class="comment"># 6. 查看关系对象上的属性长度</span></span><br><span class="line"><span class="built_in">len</span>(relationship_1)</span><br><span class="line"><span class="comment"># 7. 将关系对象上的属性值按dict输出</span></span><br><span class="line"><span class="built_in">dict</span>(relationship_1)</span><br><span class="line"><span class="comment"># 8. 返回yield 节点</span></span><br><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> walk</span><br><span class="line">walk(relationship_1)</span><br><span class="line"><span class="comment"># relationship_1：(zhangsan)-[:friend &#123;&#125;]-&gt;(lisi)</span></span><br><span class="line"><span class="comment"># walk(relationship_1)：&lt;generator object Path.walk at 0x0000019F95E9A510&gt;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> walk(relationship_1):  </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;111&quot;</span>, i)</span><br><span class="line"><span class="comment"># 111 (:Person_1 &#123;name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="comment"># 111 (zhangsan)-[:friend &#123;&#125;]-&gt;(lisi)</span></span><br><span class="line"><span class="comment"># 111 (:Person_1 &#123;name: &#x27;lisi&#x27;&#125;)</span></span><br><span class="line"><span class="comment"># 9. 返回关系类型</span></span><br><span class="line"><span class="built_in">type</span>(relationship_1)</span><br><span class="line"><span class="comment"># &lt;class &#x27;py2neo.data.friend&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-Subgraph-对象"><a href="#4-3-Subgraph-对象" class="headerlink" title="4.3 Subgraph 对象"></a>4.3 <code>Subgraph</code> 对象</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例：</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-  </span></span><br><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> Node, Relationship, Subgraph  </span><br><span class="line"></span><br><span class="line">a = Node(<span class="string">&quot;Person_1&quot;</span>, name=<span class="string">&quot;zhangsan&quot;</span>)  </span><br><span class="line">b = Node(<span class="string">&quot;Person_1&quot;</span>, name=<span class="string">&quot;lisi&quot;</span>)  </span><br><span class="line">c = Node(<span class="string">&quot;Person_1&quot;</span>, name=<span class="string">&quot;wangwu&quot;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;a：<span class="subst">&#123;a&#125;</span>&quot;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;b：<span class="subst">&#123;b&#125;</span>&quot;</span>)  </span><br><span class="line">ab = Relationship(a, <span class="string">&quot;friend&quot;</span>, b)  </span><br><span class="line">ac = Relationship(a, <span class="string">&quot;classmate&quot;</span>, c)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;ab：<span class="subst">&#123;ab&#125;</span>&quot;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;ac：<span class="subst">&#123;ac&#125;</span>&quot;</span>)  </span><br><span class="line">s = ab | ac  </span><br><span class="line"><span class="built_in">print</span>(s)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;~&quot;</span> * <span class="number">50</span>)  </span><br><span class="line"><span class="built_in">print</span>(s.nodes)  </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s.nodes:  </span><br><span class="line">    <span class="built_in">print</span>(i)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;~&quot;</span> * <span class="number">50</span>)</span><br><span class="line"><span class="built_in">print</span>(s.relationships)  </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s.relationships:  </span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">a：(:Person_1 &#123;name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="string">b：(:Person_1 &#123;name: &#x27;lisi&#x27;&#125;)</span></span><br><span class="line"><span class="string">ab：(zhangsan)-[:friend &#123;&#125;]-&gt;(lisi)</span></span><br><span class="line"><span class="string">ac：(zhangsan)-[:classmate &#123;&#125;]-&gt;(wangwu)</span></span><br><span class="line"><span class="string">Subgraph(&#123;Node(&#x27;Person_1&#x27;, name=&#x27;zhangsan&#x27;), Node(&#x27;Person_1&#x27;, name=&#x27;lisi&#x27;), Node(&#x27;Person_1&#x27;, name=&#x27;wangwu&#x27;)&#125;, &#123;friend(Node(&#x27;Person_1&#x27;, name=&#x27;zhangsan&#x27;), Node(&#x27;Person_1&#x27;, name=&#x27;lisi&#x27;)), classmate(Node(&#x27;Person_1&#x27;, name=&#x27;zhangsan&#x27;), Node(&#x27;Person_1&#x27;, name=&#x27;wangwu&#x27;))&#125;)</span></span><br><span class="line"><span class="string">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="string">&lt;py2neo.collections.SetView object at 0x0000021CF0F3BFD0&gt;</span></span><br><span class="line"><span class="string">(:Person_1 &#123;name: &#x27;zhangsan&#x27;&#125;)</span></span><br><span class="line"><span class="string">(:Person_1 &#123;name: &#x27;lisi&#x27;&#125;)</span></span><br><span class="line"><span class="string">(:Person_1 &#123;name: &#x27;wangwu&#x27;&#125;)</span></span><br><span class="line"><span class="string">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="string">&lt;py2neo.collections.SetView object at 0x0000021CF0F98940&gt;</span></span><br><span class="line"><span class="string">(zhangsan)-[:friend &#123;&#125;]-&gt;(lisi)</span></span><br><span class="line"><span class="string">(zhangsan)-[:classmate &#123;&#125;]-&gt;(wangwu)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-3-1-运算符"><a href="#4-3-1-运算符" class="headerlink" title="4.3.1 运算符"></a>4.3.1 运算符</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># &#x27;|&#x27; 或。包含来自子图的所有节点和关系，两者共有的任何实体只包含一次。</span></span><br><span class="line"><span class="comment"># &#x27;&amp;&#x27; 与。返回共有的所有节点和关系。</span></span><br><span class="line"><span class="comment"># -</span></span><br><span class="line"><span class="comment"># ^</span></span><br><span class="line">注意：这部分运算符与集合操作运算符一致。</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-Subgraph-对象属性和方法"><a href="#4-3-2-Subgraph-对象属性和方法" class="headerlink" title="4.3.2 Subgraph 对象属性和方法"></a>4.3.2 <code>Subgraph</code> 对象属性和方法</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 返回图中所有属性的键</span></span><br><span class="line">subgraph.keys()</span><br><span class="line"><span class="comment"># 注意：如果节点和关系具有相同的key，则只返回一个。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 返回图中节点标签集合</span></span><br><span class="line">subgraph.labels</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 返回图中节点集合</span></span><br><span class="line">subgraph.nodes</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 返回图中所有关系集合</span></span><br><span class="line">subgraph.relationships</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 返回图中所有关系类型的集合</span></span><br><span class="line">subgraph.types()</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>XiaoPang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://zhang123-123.github.io/2021/08/13/%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93Neo4j/" title="图形数据库">https://zhang123-123.github.io/2021/08/13/图形数据库Neo4j/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhang123-123.github.io/2021/08/13/%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93Neo4j/"  aria-label="复制成功！"></i></span>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          icon: "success",
+          showConfirmButton: true
+          });
+        });
+    });
+</script>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/neo4j/" rel="tag"><i class="fa fa-tag"></i> neo4j</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/" rel="next" title="主机访问虚拟机端口">
+      主机访问虚拟机端口 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是图形数据库？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-neo4j-%E5%BA%94%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2. neo4j 应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 概念介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Cypher-%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Cypher 查询语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E7%94%A8%E6%B3%95%E4%B8%BE%E4%BE%8B"><span class="nav-number">2.3.</span> <span class="nav-text">2.4 用法举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Neo4j-CQL"><span class="nav-number">3.</span> <span class="nav-text">3. Neo4j CQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CQL-%E5%91%BD%E4%BB%A4%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 CQL 命令、介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-CQL-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 CQL 数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-CREATE-%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">3.2 CREATE 使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-MATCH-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">3.3 MATCH 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-DELETE-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.5.</span> <span class="nav-text">3.4 DELETE 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-REMOVE-%E5%88%A0%E9%99%A4"><span class="nav-number">3.6.</span> <span class="nav-text">3.5 REMOVE 删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-SET-%E5%AD%90%E5%8F%A5"><span class="nav-number">3.7.</span> <span class="nav-text">3.6 SET 子句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-ORDER-BY-%E6%8E%92%E5%BA%8F"><span class="nav-number">3.8.</span> <span class="nav-text">3.7 ORDER BY 排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-UNION-%E5%90%88%E5%B9%B6"><span class="nav-number">3.9.</span> <span class="nav-text">3.8 UNION 合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-9-SKIP-LIMIT-%E5%AD%90%E5%8F%A5"><span class="nav-number">3.10.</span> <span class="nav-text">3.9 SKIP&#x2F;LIMIT 子句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-10-CQL-%E5%90%88%E5%B9%B6"><span class="nav-number">3.11.</span> <span class="nav-text">3.10 CQL 合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-IN-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">3.12.</span> <span class="nav-text">3.11 IN 操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-12-%E5%9B%BE%E5%BD%A2%E5%AD%97%E4%BD%93%E6%A0%B7%E5%BC%8F"><span class="nav-number">3.13.</span> <span class="nav-text">3.12 图形字体样式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Python-%E6%93%8D%E4%BD%9C-neo4j"><span class="nav-number">4.</span> <span class="nav-text">4 Python 操作 neo4j</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%89%E8%A3%85%E6%A8%A1%E5%9D%97"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 安装模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Node-%E5%92%8C-Relationship-%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 Node 和 Relationship 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9%EF%BC%8C%E5%85%B3%E7%B3%BB%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.2.1.</span> <span class="nav-text">4.2.1 创建节点，关系对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-Node%E8%8A%82%E7%82%B9%E5%AF%B9%E8%B1%A1%E6%93%8D%E4%BD%9C"><span class="nav-number">4.2.2.</span> <span class="nav-text">4.2.2 Node节点对象操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-3-Relationship-%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.2.3.</span> <span class="nav-text">4.2.3 Relationship 节点关系对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Subgraph-%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 Subgraph 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">4.3.1.</span> <span class="nav-text">4.3.1 运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-2-Subgraph-%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.2.</span> <span class="nav-text">4.3.2 Subgraph 对象属性和方法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="XiaoPang"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">XiaoPang</p>
+  <div class="site-description" itemprop="description">少说，多做</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhang123-123" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhang123-123" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1741290057@qq.com" title="E-Mail → 1741290057@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XiaoPang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+    <script type="text/javascript" color="0,0,0" opacity='0.5' zIndex="-2" count="200" src="/js/my_js/canvas-nest.min.js"></script>
+    
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/my_js/clicklove.js"></script>
+
+<!-- calendar widget -->
+
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
+
+</html>
