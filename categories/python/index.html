@@ -468,3 +468,30 @@
 
 
 </html>
+  
+    <script type="text/javascript" color="0,0,0" opacity='0.5' zIndex="-2" count="200" src="/js/my_js/canvas-nest.min.js"></script>
+    
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/my_js/clicklove.js"></script>
+
+<!-- calendar widget -->
+
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
+
+</html>
