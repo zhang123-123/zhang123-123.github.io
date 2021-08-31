@@ -22,21 +22,21 @@
     var CONFIG = {"hostname":"zhang123-123.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="主机访问虚拟机端口 默认情况下，主机可以ping通ip，主机对虚拟机端口访问连接telnet是连接失败。 centos7以前的版本默认使用iptables服务进行管理防火墙规则。centos7以及其以上版本默认使用firewalld服务管理防火墙。所以在centos8中，就使用其默认的firewalld配置防火墙。">
+  <meta name="description" content="1109. 航班预订统计">
 <meta property="og:type" content="article">
-<meta property="og:title" content="主机访问虚拟机端口">
-<meta property="og:url" content="https://zhang123-123.github.io/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/index.html">
+<meta property="og:title" content="1109. 航班预订统计">
+<meta property="og:url" content="https://zhang123-123.github.io/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/index.html">
 <meta property="og:site_name" content="XiaoPang の Blog">
-<meta property="og:description" content="主机访问虚拟机端口 默认情况下，主机可以ping通ip，主机对虚拟机端口访问连接telnet是连接失败。 centos7以前的版本默认使用iptables服务进行管理防火墙规则。centos7以及其以上版本默认使用firewalld服务管理防火墙。所以在centos8中，就使用其默认的firewalld配置防火墙。">
+<meta property="og:description" content="1109. 航班预订统计">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-13T01:40:00.000Z">
-<meta property="article:modified_time" content="2021-08-17T02:17:46.372Z">
+<meta property="article:published_time" content="2021-08-31T01:40:00.000Z">
+<meta property="article:modified_time" content="2021-08-31T03:09:33.143Z">
 <meta property="article:author" content="XiaoPang">
-<meta property="article:tag" content="firewalld">
-<meta property="article:tag" content="iptables">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zhang123-123.github.io/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/">
+<link rel="canonical" href="https://zhang123-123.github.io/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/">
 
 
 <script id="page-configurations">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>主机访问虚拟机端口 | XiaoPang の Blog</title>
+  <title>1109. 航班预订统计 | XiaoPang の Blog</title>
   
 
 
@@ -216,7 +216,7 @@
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zhang123-123.github.io/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/">
+    <link itemprop="mainEntityOfPage" href="https://zhang123-123.github.io/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -229,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          主机访问虚拟机端口
+          1109. 航班预订统计
         </h1>
 
         <div class="post-meta">
@@ -238,15 +238,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于：</span>
+              
 
-              <time title="创建时间：2021-08-13 09:40:00" itemprop="dateCreated datePublished" datetime="2021-08-13T09:40:00+08:00">2021-08-13</time>
+              <time title="创建时间：2021-08-31 09:40:00 / 修改时间：11:09:33" itemprop="dateCreated datePublished" datetime="2021-08-31T09:40:00+08:00">2021-08-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于：</span>
-                <time title="修改时间：2021-08-17 10:17:46" itemprop="dateModified" datetime="2021-08-17T10:17:46+08:00">2021-08-17</time>
+                <time title="修改时间：2021-08-31 11:09:33" itemprop="dateModified" datetime="2021-08-31T11:09:33+08:00">2021-08-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +255,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
                 </span>
             </span>
 
@@ -274,7 +275,7 @@
             </span>
            <span class="post-meta-item-text">本文字数：</span>
            <span title="post.wordcount">
-                207 字
+                533 字
             </span>
             </span>
             <span class="post-meta-item" title="阅读时长">
@@ -283,7 +284,7 @@
             </span>
           <span class="post-meta-item-text">阅读时长：</span>
            <span title="post.min2read">
-                1 分钟
+                2 分钟
             </span>
             </span>
 
@@ -296,13 +297,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="主机访问虚拟机端口"><a href="#主机访问虚拟机端口" class="headerlink" title="主机访问虚拟机端口"></a>主机访问虚拟机端口</h2><ul>
-<li>默认情况下，主机可以<code>ping</code>通<code>ip</code>，主机对虚拟机端口访问连接<code>telnet</code>是连接失败。</li>
-<li><code>centos7</code>以前的版本默认使用<code>iptables</code>服务进行管理防火墙规则。<code>centos7</code>以及其以上版本默认使用<code>firewalld</code>服务管理防火墙。所以在<code>centos8</code>中，就使用其默认的<code>firewalld</code>配置防火墙。<span id="more"></span>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><h4 id="1-关闭防火墙firewalld"><a href="#1-关闭防火墙firewalld" class="headerlink" title="1. 关闭防火墙firewalld"></a>1. 关闭防火墙<code>firewalld</code></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 停止 firewalld</span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line"># 禁止 firewalld 开机启动</span><br><span class="line">systemctl disable firewalld.service</span><br></pre></td></tr></table></figure>
-<h4 id="2-安装-iptables-service"><a href="#2-安装-iptables-service" class="headerlink" title="2. 安装 iptables service"></a>2. 安装 <code>iptables service</code></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install iptables-services</span><br></pre></td></tr></table></figure>
-<h4 id="3-修改配置，添加外部访问接口"><a href="#3-修改配置，添加外部访问接口" class="headerlink" title="3. 修改配置，添加外部访问接口"></a>3. 修改配置，添加外部访问接口</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 配置文件地址：</span><br><span class="line">/etc/sysconfig/iptables</span><br><span class="line"># 添加规则</span><br><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT</span><br></pre></td></tr></table></figure>
-<h4 id="4-防火墙启动"><a href="#4-防火墙启动" class="headerlink" title="4. 防火墙启动"></a>4. 防火墙启动</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 重启防火墙使配置生效</span><br><span class="line">systemctl restart iptables.service</span><br><span class="line"># 设置防火墙开机启动</span><br><span class="line">systemctl enable iptables.service</span><br></pre></td></tr></table></figure></li>
+        <p><strong>1109. 航班预订统计</strong></p>
+<span id="more"></span>
+
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">这里有 n 个航班，它们分别从 1 到 n 进行编号。</span><br><span class="line">有一份航班预订表 bookings ，表中第 i 条预订记录 bookings[i] = [firsti, lasti, seatsi] 意味着在从 firsti 到 lasti （包含 firsti 和 lasti ）的 每个航班 上预订了 seatsi 个座位。</span><br><span class="line">请你返回一个长度为 n 的数组 answer，其中 answer[i] 是航班 i 上预订的座位总数。</span><br><span class="line">示例 1：</span><br><span class="line">输入：bookings = [[1,2,10],[2,3,20],[2,5,25]], n = 5</span><br><span class="line">输出：[10,55,45,25,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2   3   4   5</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       20  20</span><br><span class="line">预订记录 3 ：       25  25  25  25</span><br><span class="line">总座位数：      10  55  45  25  25</span><br><span class="line">因此，answer = [10,55,45,25,25]</span><br><span class="line">示例 2：</span><br><span class="line">输入：bookings = [[1,2,10],[2,2,15]], n = 2</span><br><span class="line">输出：[10,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       15</span><br><span class="line">总座位数：      10  25</span><br><span class="line">因此，answer = [10,25]</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= n &lt;= 2 * 10 ** 4</span><br><span class="line">1 &lt;= bookings.length &lt;= 2 * 10 ** 4</span><br><span class="line">bookings[i].length == 3</span><br><span class="line">1 &lt;= firsti &lt;= lasti &lt;= n</span><br><span class="line">1 &lt;= seatsi &lt;= 10 ** 4</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>问题转换：<ol>
+<li>某公交有<code>n</code>站，第<code>i</code>条记录 <code>bookings[i] = [i, j, k]</code>，表示在 <code>i</code> 站上车 <code>k</code>人，乘坐到<code>j</code>站，在<code>j + 1</code> 站下车，需要按照车站顺序返回每一站车上人数；</li>
+<li>根据<code>1</code> 的思路，定义 <code>re_list</code> 列表记录每站人数。因为题目中站是从<code>1</code>记录，<code>re_list[i]</code> 表示第 <code>i + 1</code> 站。遍历<code>bookings</code>，<code>bookings[i] = [i, j, k]</code> 表示在 <code>i</code> 站增加 <code>k</code> 人，即 <code>re_list[i - 1] += k</code>，在 <code>j + 1</code> 站减少 <code>k</code> 人即<code>re_list[j] -= k</code></li>
+<li>遍历 <code>re_list</code> 列表，获取每站人数：每一站人数为前一站人数 + 当前站人数变化。<code>re_list[i] += re_list[i - 1]</code> </li>
+</ol>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">corpFlightBookings</span>(<span class="params">self, bookings: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]], n: <span class="built_in">int</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = [<span class="number">0</span>] * n</span><br><span class="line">        <span class="keyword">for</span> booking <span class="keyword">in</span> bookings:</span><br><span class="line">            first = booking[<span class="number">0</span>]</span><br><span class="line">            last = booking[<span class="number">1</span>]</span><br><span class="line">            seats = booking[<span class="number">2</span>]</span><br><span class="line">            re_list[first - <span class="number">1</span>] += seats</span><br><span class="line">            <span class="keyword">if</span> last &lt; n:</span><br><span class="line">                re_list[last] -= seats</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            re_list[i] += re_list[i - <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    booking_list = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">10</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">20</span>], [<span class="number">2</span>, <span class="number">5</span>, <span class="number">25</span>]]</span><br><span class="line">    n_int = <span class="number">5</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.corpFlightBookings(booking_list, n_int)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
+<li>时间复杂度：<code>O(n)</code></li>
+<li>空间复杂度：<code>O(1)</code></li>
 </ul>
 
     </div>
@@ -319,8 +331,8 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zhang123-123.github.io/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/" title="主机访问虚拟机端口">https://zhang123-123.github.io/2021/08/13/主机访问虚拟机端口/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhang123-123.github.io/2021/08/13/%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3/"  aria-label="复制成功！"></i></span>
+    <a href="https://zhang123-123.github.io/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/" title="1109. 航班预订统计">https://zhang123-123.github.io/2021/08/31/1109. 航班预订统计/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhang123-123.github.io/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/"  aria-label="复制成功！"></i></span>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -344,8 +356,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/firewalld/" rel="tag"><i class="fa fa-tag"></i> firewalld</a>
-              <a href="/tags/iptables/" rel="tag"><i class="fa fa-tag"></i> iptables</a>
+              <a href="/tags/leetcode/" rel="tag"><i class="fa fa-tag"></i> leetcode</a>
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
           </div>
 
         
@@ -354,13 +366,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/13/yum%20%E6%9B%B4%E6%94%B9%E4%B8%BA%E9%98%BF%E9%87%8C%E4%BA%91%E7%9A%84yum%E6%BA%90/" rel="prev" title="更改`centos` yum源">
-      <i class="fa fa-chevron-left"></i> 更改`centos` yum源
+    <a href="/2021/08/26/Nginx%20%E4%BB%8B%E7%BB%8D/" rel="prev" title="Nginx 介绍及使用">
+      <i class="fa fa-chevron-left"></i> Nginx 介绍及使用
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/13/python%20%E6%93%8D%E4%BD%9Credis,%20%E9%9B%86%E5%90%88%EF%BC%88set%EF%BC%89%E7%B1%BB%E5%9E%8B/" rel="next" title="python 操作redis, 集合（set）类型">
-      python 操作redis, 集合（set）类型 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -420,7 +429,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">主机访问虚拟机端口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99firewalld"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 关闭防火墙firewalld</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85-iptables-service"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 安装 iptables service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%EF%BC%8C%E6%B7%BB%E5%8A%A0%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AE%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 修改配置，添加外部访问接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E9%98%B2%E7%81%AB%E5%A2%99%E5%90%AF%E5%8A%A8"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 防火墙启动</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">复杂度分析</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
