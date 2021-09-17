@@ -22,21 +22,21 @@
     var CONFIG = {"hostname":"zhang123-123.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="413. 等差数列划分">
+  <meta name="description" content="496. 下一个更大元素 I">
 <meta property="og:type" content="article">
-<meta property="og:title" content="413. 等差数列划分">
-<meta property="og:url" content="https://zhang123-123.github.io/2021/09/14/413.%20%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86/index.html">
+<meta property="og:title" content="496. 下一个更大元素 I">
+<meta property="og:url" content="https://zhang123-123.github.io/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/index.html">
 <meta property="og:site_name" content="XiaoPang の Blog">
-<meta property="og:description" content="413. 等差数列划分">
+<meta property="og:description" content="496. 下一个更大元素 I">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-09-14T08:04:00.000Z">
-<meta property="article:modified_time" content="2021-09-14T08:50:35.909Z">
+<meta property="article:published_time" content="2021-09-17T02:10:00.000Z">
+<meta property="article:modified_time" content="2021-09-17T02:36:03.676Z">
 <meta property="article:author" content="XiaoPang">
 <meta property="article:tag" content="leetcode">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zhang123-123.github.io/2021/09/14/413.%20%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86/">
+<link rel="canonical" href="https://zhang123-123.github.io/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/">
 
 
 <script id="page-configurations">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>413. 等差数列划分 | XiaoPang の Blog</title>
+  <title>496. 下一个更大元素 I | XiaoPang の Blog</title>
   
 
 
@@ -216,7 +216,7 @@
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zhang123-123.github.io/2021/09/14/413.%20%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86/">
+    <link itemprop="mainEntityOfPage" href="https://zhang123-123.github.io/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -229,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          413. 等差数列划分
+          496. 下一个更大元素 I
         </h1>
 
         <div class="post-meta">
@@ -240,14 +240,14 @@
               <span class="post-meta-item-text">发表于：</span>
               
 
-              <time title="创建时间：2021-09-14 16:04:00 / 修改时间：16:50:35" itemprop="dateCreated datePublished" datetime="2021-09-14T16:04:00+08:00">2021-09-14</time>
+              <time title="创建时间：2021-09-17 10:10:00 / 修改时间：10:36:03" itemprop="dateCreated datePublished" datetime="2021-09-17T10:10:00+08:00">2021-09-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于：</span>
-                <time title="修改时间：2021-09-14 16:50:35" itemprop="dateModified" datetime="2021-09-14T16:50:35+08:00">2021-09-14</time>
+                <time title="修改时间：2021-09-17 10:36:03" itemprop="dateModified" datetime="2021-09-17T10:36:03+08:00">2021-09-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,7 +275,7 @@
             </span>
            <span class="post-meta-item-text">本文字数：</span>
            <span title="post.wordcount">
-                428 字
+                728 字
             </span>
             </span>
             <span class="post-meta-item" title="阅读时长">
@@ -284,7 +284,7 @@
             </span>
           <span class="post-meta-item-text">阅读时长：</span>
            <span title="post.min2read">
-                1 分钟
+                3 分钟
             </span>
             </span>
 
@@ -297,24 +297,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong>413. 等差数列划分</strong></p>
+        <p><strong>496. 下一个更大元素 I</strong></p>
 <span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">413. 等差数列划分</span><br><span class="line">如果一个数列 至少有三个元素 ，并且任意两个相邻元素之差相同，则称该数列为等差数列。</span><br><span class="line">例如，[1,3,5,7,9]、[7,7,7,7] 和 [3,-1,-5,-9] 都是等差数列。</span><br><span class="line">给你一个整数数组 nums ，返回数组 nums 中所有为等差数组的 子数组 个数。</span><br><span class="line">子数组 是数组中的一个连续序列。</span><br><span class="line">示例 1：</span><br><span class="line">输入：nums = [1,2,3,4]</span><br><span class="line">输出：3</span><br><span class="line">解释：nums 中有三个子等差数组：[1, 2, 3]、[2, 3, 4] 和 [1,2,3,4] 自身。</span><br><span class="line">示例 2：</span><br><span class="line">输入：nums = [1]</span><br><span class="line">输出：0</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums.length &lt;= 5000</span><br><span class="line">-1000 &lt;= nums[i] &lt;= 1000</span><br></pre></td></tr></table></figure>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">给你两个 没有重复元素 的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。</span><br><span class="line">请你找出 nums1 中每个元素在 nums2 中的下一个比其大的值。</span><br><span class="line">nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出 -1 。</span><br><span class="line">示例 1:</span><br><span class="line">输入: nums1 = [4,1,2], nums2 = [1,3,4,2].</span><br><span class="line">输出: [-1,3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 4 ，你无法在第二个数组中找到下一个更大的数字，因此输出 -1 。</span><br><span class="line">    对于 num1 中的数字 1 ，第二个数组中数字1右边的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">示例 2:</span><br><span class="line">输入: nums1 = [2,4], nums2 = [1,2,3,4].</span><br><span class="line">输出: [3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 4 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums1.length &lt;= nums2.length &lt;= 1000</span><br><span class="line">0 &lt;= nums1[i], nums2[i] &lt;= 10 ^ 4</span><br><span class="line">nums1和nums2中所有整数 互不相同</span><br><span class="line">nums1 中的所有整数同样出现在 nums2 中</span><br><span class="line">进阶：你可以设计一个时间复杂度为 O(nums1.length + nums2.length) 的解决方案吗？</span><br></pre></td></tr></table></figure>
 
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>因为一个数列 至少有三个元素，所以判断 <code>nums</code> 长度，如果小于 <code>3</code> 直接返回 <code>0</code>;</li>
-<li>计算当前值与上一个值得差值，比较得到的差值与之前存储的差值是否相等<ul>
-<li>如果相等，则 <code>count + 1</code>；</li>
-<li>如果不相等，计算等差数列：<code>count * (count - 1) // 2</code>，<code>count = 1</code>、<code>last_num = c_num</code></li>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><ul>
+<li>使用两重循环遍历</li>
 </ul>
-</li>
-<li>遍历完成，需要累加最后一次等差数列计算 <code>count * (count - 1) // 2</code></li>
+<ol>
+<li>外层循环遍历 <code>nums1</code>，内层循环遍历 <code>nums2</code></li>
+<li>判断两层数据是否一致，如果一致，标记位置，然后继续遍历 <code>nums2</code>，获取右边第一个比 <code>num1</code> 大的数，如果遍历结束没有找到，记录 <code>-1</code></li>
 </ol>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">numberOfArithmeticSlices</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(nums) &lt; <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        all_count = <span class="number">0</span></span><br><span class="line">        last_num = nums[<span class="number">0</span>]</span><br><span class="line">        c_num = nums[<span class="number">1</span>] - nums[<span class="number">0</span>]</span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums[<span class="number">1</span>:]:</span><br><span class="line">            c = num - last_num</span><br><span class="line">            <span class="keyword">if</span> c == c_num:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                all_count += count * (count - <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">                count = <span class="number">1</span></span><br><span class="line">                c_num = c</span><br><span class="line">            last_num = num</span><br><span class="line">        all_count += count * (count - <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">        <span class="keyword">return</span> all_count</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    1 2 3</span></span><br><span class="line"><span class="string">    2 3 4</span></span><br><span class="line"><span class="string">    3 4 5</span></span><br><span class="line"><span class="string">    1 2 3 4</span></span><br><span class="line"><span class="string">    2 3 4 5</span></span><br><span class="line"><span class="string">    1 2 3 4 5</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.numberOfArithmeticSlices(num_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><ol>
+<li>遍历 <code>nums2</code>，获取每一个元素右边的第一个更大的值</li>
+<li>遍历 <code>nums1</code>，查找 <code>nums2_dict</code> 获取更大的值</li>
+</ol>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><h3 id="第一种-1"><a href="#第一种-1" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = []</span><br><span class="line">        <span class="keyword">for</span> num_1 <span class="keyword">in</span> nums1:</span><br><span class="line">            is_find = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">for</span> num_2 <span class="keyword">in</span> nums2:</span><br><span class="line">                <span class="keyword">if</span> num_1 == num_2:</span><br><span class="line">                    is_find = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">elif</span> is_find <span class="keyword">and</span> num_2 &gt; num_1:</span><br><span class="line">                    re_list.append(num_2)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                re_list.append(-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br></pre></td></tr></table></figure>
 
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<code>O(n)</code></li>
+<h3 id="第二种-1"><a href="#第二种-1" class="headerlink" title="第二种"></a>第二种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        <span class="comment"># 1. 遍历 nums2，获取每一个元素右边的第一个更大的值</span></span><br><span class="line">        nums2_dict = &#123;&#125;</span><br><span class="line">        re_list = []</span><br><span class="line">        new_list = []</span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums2:</span><br><span class="line">            <span class="keyword">while</span> new_list:</span><br><span class="line">                last_num = new_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> last_num &gt; num:</span><br><span class="line">                    <span class="comment"># new_list.append(num)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                nums2_dict[last_num] = num</span><br><span class="line">                new_list.pop()</span><br><span class="line">            new_list.append(num)</span><br><span class="line">        <span class="keyword">while</span> new_list:</span><br><span class="line">            last_num = new_list.pop()</span><br><span class="line">            nums2_dict[last_num] = -<span class="number">1</span></span><br><span class="line">        <span class="comment"># 2. 遍历 nums1，查找nums2_dict 获取更大的值</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums1:</span><br><span class="line">            re_list.append(nums2_dict[num])</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list_1 = [<span class="number">2</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">3</span>]</span><br><span class="line">    num_list_2 = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">3</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.nextGreaterElement(num_list_1, num_list_2)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><h3 id="第一种-2"><a href="#第一种-2" class="headerlink" title="第一种"></a>第一种</h3><ul>
+<li>时间复杂度：<code>O(m * n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
 <li>空间复杂度：<code>O(1)</code></li>
+</ul>
+<h3 id="第二种-2"><a href="#第二种-2" class="headerlink" title="第二种"></a>第二种</h3><ul>
+<li>时间复杂度：<code>O(m + n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
+<li>空间复杂度：<code>O(n)</code>。其中 <code>n</code> 是 <code>nums2</code> 长度</li>
 </ul>
 
     </div>
@@ -331,8 +339,8 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://zhang123-123.github.io/2021/09/14/413.%20%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86/" title="413. 等差数列划分">https://zhang123-123.github.io/2021/09/14/413. 等差数列划分/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhang123-123.github.io/2021/09/14/413.%20%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86/"  aria-label="复制成功！"></i></span>
+    <a href="https://zhang123-123.github.io/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/" title="496. 下一个更大元素 I">https://zhang123-123.github.io/2021/09/17/496. 下一个更大元素 I/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://zhang123-123.github.io/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/"  aria-label="复制成功！"></i></span>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -366,12 +374,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/09/14/524.%20%E9%80%9A%E8%BF%87%E5%88%A0%E9%99%A4%E5%AD%97%E6%AF%8D%E5%8C%B9%E9%85%8D%E5%88%B0%E5%AD%97%E5%85%B8%E9%87%8C%E6%9C%80%E9%95%BF%E5%8D%95%E8%AF%8D/" rel="prev" title="524. 通过删除字母匹配到字典里最长单词">
-      <i class="fa fa-chevron-left"></i> 524. 通过删除字母匹配到字典里最长单词
+    <a href="/2021/09/16/Python%20%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="prev" title="Python 单例模式">
+      <i class="fa fa-chevron-left"></i> Python 单例模式
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/09/15/162.%20%E5%AF%BB%E6%89%BE%E5%B3%B0%E5%80%BC/" rel="next" title="162. 寻找峰值">
-      162. 寻找峰值 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/09/17/503.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20II/" rel="next" title="503. 下一个更大元素 II">
+      503. 下一个更大元素 II <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -432,7 +440,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="nav-number">3.</span> <span class="nav-text">代码演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">复杂度分析</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D"><span class="nav-number">2.1.</span> <span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D"><span class="nav-number">2.2.</span> <span class="nav-text">第二种</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="nav-number">3.</span> <span class="nav-text">代码演示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D-1"><span class="nav-number">3.1.</span> <span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D-1"><span class="nav-number">3.2.</span> <span class="nav-text">第二种</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D-2"><span class="nav-number">4.1.</span> <span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D-2"><span class="nav-number">4.2.</span> <span class="nav-text">第二种</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
