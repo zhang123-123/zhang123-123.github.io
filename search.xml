@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>1109. 航班预订统计</title>
+    <url>/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/</url>
+    <content><![CDATA[<p><strong>1109. 航班预订统计</strong></p>
+<span id="more"></span>
+
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这里有 n 个航班，它们分别从 1 到 n 进行编号。</span><br><span class="line">有一份航班预订表 bookings ，表中第 i 条预订记录 bookings[i] = [firsti, lasti, seatsi] 意味着在从 firsti 到 lasti （包含 firsti 和 lasti ）的 每个航班 上预订了 seatsi 个座位。</span><br><span class="line">请你返回一个长度为 n 的数组 answer，其中 answer[i] 是航班 i 上预订的座位总数。</span><br><span class="line">示例 1：</span><br><span class="line">输入：bookings = [[1,2,10],[2,3,20],[2,5,25]], n = 5</span><br><span class="line">输出：[10,55,45,25,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2   3   4   5</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       20  20</span><br><span class="line">预订记录 3 ：       25  25  25  25</span><br><span class="line">总座位数：      10  55  45  25  25</span><br><span class="line">因此，answer = [10,55,45,25,25]</span><br><span class="line">示例 2：</span><br><span class="line">输入：bookings = [[1,2,10],[2,2,15]], n = 2</span><br><span class="line">输出：[10,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       15</span><br><span class="line">总座位数：      10  25</span><br><span class="line">因此，answer = [10,25]</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= n &lt;= 2 * 10 ** 4</span><br><span class="line">1 &lt;= bookings.length &lt;= 2 * 10 ** 4</span><br><span class="line">bookings[i].length == 3</span><br><span class="line">1 &lt;= firsti &lt;= lasti &lt;= n</span><br><span class="line">1 &lt;= seatsi &lt;= 10 ** 4</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>问题转换：<ol>
+<li>某公交有<code>n</code>站，第<code>i</code>条记录 <code>bookings[i] = [i, j, k]</code>，表示在 <code>i</code> 站上车 <code>k</code>人，乘坐到<code>j</code>站，在<code>j + 1</code> 站下车，需要按照车站顺序返回每一站车上人数；</li>
+<li>根据<code>1</code> 的思路，定义 <code>re_list</code> 列表记录每站人数。因为题目中站是从<code>1</code>记录，<code>re_list[i]</code> 表示第 <code>i + 1</code> 站。遍历<code>bookings</code>，<code>bookings[i] = [i, j, k]</code> 表示在 <code>i</code> 站增加 <code>k</code> 人，即 <code>re_list[i - 1] += k</code>，在 <code>j + 1</code> 站减少 <code>k</code> 人即<code>re_list[j] -= k</code></li>
+<li>遍历 <code>re_list</code> 列表，获取每站人数：每一站人数为前一站人数 + 当前站人数变化。<code>re_list[i] += re_list[i - 1]</code> </li>
+</ol>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">corpFlightBookings</span>(<span class="params">self, bookings: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]], n: <span class="built_in">int</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = [<span class="number">0</span>] * n</span><br><span class="line">        <span class="keyword">for</span> booking <span class="keyword">in</span> bookings:</span><br><span class="line">            first = booking[<span class="number">0</span>]</span><br><span class="line">            last = booking[<span class="number">1</span>]</span><br><span class="line">            seats = booking[<span class="number">2</span>]</span><br><span class="line">            re_list[first - <span class="number">1</span>] += seats</span><br><span class="line">            <span class="keyword">if</span> last &lt; n:</span><br><span class="line">                re_list[last] -= seats</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            re_list[i] += re_list[i - <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    booking_list = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">10</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">20</span>], [<span class="number">2</span>, <span class="number">5</span>, <span class="number">25</span>]]</span><br><span class="line">    n_int = <span class="number">5</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.corpFlightBookings(booking_list, n_int)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
+<li>时间复杂度：<code>O(n)</code></li>
+<li>空间复杂度：<code>O(1)</code></li>
+</ul>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>162. 寻找峰值</title>
+    <url>/2021/09/15/162.%20%E5%AF%BB%E6%89%BE%E5%B3%B0%E5%80%BC/</url>
+    <content><![CDATA[<p><strong>162. 寻找峰值</strong></p>
+<span id="more"></span>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">峰值元素是指其值严格大于左右相邻值的元素。</span><br><span class="line">给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。</span><br><span class="line">你可以假设 nums[-1] = nums[n] = -∞ 。</span><br><span class="line">你必须实现时间复杂度为 O(log n) 的算法来解决此问题。</span><br><span class="line">示例 1：</span><br><span class="line">输入：nums = [1,2,3,1]</span><br><span class="line">输出：2</span><br><span class="line">解释：3 是峰值元素，你的函数应该返回其索引 2。</span><br><span class="line">示例 2：</span><br><span class="line">输入：nums = [1,2,1,3,5,6,4]</span><br><span class="line">输出：1 或 5</span><br><span class="line">解释：你的函数可以返回索引 1，其峰值元素为 2；</span><br><span class="line">     或者返回索引 5， 其峰值元素为 6。</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums.length &lt;= 1000</span><br><span class="line">-2 ^ 31 &lt;= nums[i] &lt;= 2 ^ 31 - 1</span><br><span class="line">对于所有有效的 i 都有 nums[i] != nums[i + 1]</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>题目描述：<code>nums[-1] = nums[n] = -∞</code>，且 <code>nums.length &gt;= 1</code>，所以列表 <code>list</code> 一定存在峰值</li>
+<li>左边/右边索引 <code>l</code>/ <code>r</code>中间位置索引 <code>mid = (l + r) // 2</code>，判断 <code>nums[mid]</code> 与 <code>nums[mid + 1]</code> 的值<ul>
+<li>如果 <code>nums[mid] &lt; nums[mid + 1]</code>，则 <code>mid</code> 右侧一定存在峰值（左侧不一定存在），即 <code>l = mid + 1</code></li>
+<li>如果 <code>nums[mid] &gt; nums[mid + 1]</code>, 则 <code>mid</code> 左侧一定存在峰值（包含 <code>mid</code>），即 <code>r = mid</code></li>
+</ul>
+</li>
+<li>如果 <code>l == r</code>，则索引 <code>l</code> 位置对应元素是峰值</li>
+</ul>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findPeakElement</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        n_len = <span class="built_in">len</span>(nums)</span><br><span class="line">        l = <span class="number">0</span></span><br><span class="line">        r = n_len - <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">            <span class="keyword">if</span> l == r:</span><br><span class="line">                <span class="keyword">return</span> l</span><br><span class="line">            mid = (l + r) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> nums[mid] &lt; nums[mid + <span class="number">1</span>]:</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                r = mid</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.findPeakElement(num_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
+<li>时间复杂度：<code>O(log n)</code></li>
+<li>空间复杂度：<code>O(1)</code></li>
+</ul>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>1646. 获取生成数组中的最大值</title>
     <url>/2021/08/23/1646.%20%E8%8E%B7%E5%8F%96%E7%94%9F%E6%88%90%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/</url>
     <content><![CDATA[<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><span id="more"></span>
@@ -22,37 +84,6 @@
 <li><code>O(n)</code>，需要构建一个<code>n + 1</code> 的列表。</li>
 </ul>
 </li>
-</ul>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>1109. 航班预订统计</title>
-    <url>/2021/08/31/1109.%20%E8%88%AA%E7%8F%AD%E9%A2%84%E8%AE%A2%E7%BB%9F%E8%AE%A1/</url>
-    <content><![CDATA[<p><strong>1109. 航班预订统计</strong></p>
-<span id="more"></span>
-
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">这里有 n 个航班，它们分别从 1 到 n 进行编号。</span><br><span class="line">有一份航班预订表 bookings ，表中第 i 条预订记录 bookings[i] = [firsti, lasti, seatsi] 意味着在从 firsti 到 lasti （包含 firsti 和 lasti ）的 每个航班 上预订了 seatsi 个座位。</span><br><span class="line">请你返回一个长度为 n 的数组 answer，其中 answer[i] 是航班 i 上预订的座位总数。</span><br><span class="line">示例 1：</span><br><span class="line">输入：bookings = [[1,2,10],[2,3,20],[2,5,25]], n = 5</span><br><span class="line">输出：[10,55,45,25,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2   3   4   5</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       20  20</span><br><span class="line">预订记录 3 ：       25  25  25  25</span><br><span class="line">总座位数：      10  55  45  25  25</span><br><span class="line">因此，answer = [10,55,45,25,25]</span><br><span class="line">示例 2：</span><br><span class="line">输入：bookings = [[1,2,10],[2,2,15]], n = 2</span><br><span class="line">输出：[10,25]</span><br><span class="line">解释：</span><br><span class="line">航班编号        1   2</span><br><span class="line">预订记录 1 ：   10  10</span><br><span class="line">预订记录 2 ：       15</span><br><span class="line">总座位数：      10  25</span><br><span class="line">因此，answer = [10,25]</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= n &lt;= 2 * 10 ** 4</span><br><span class="line">1 &lt;= bookings.length &lt;= 2 * 10 ** 4</span><br><span class="line">bookings[i].length == 3</span><br><span class="line">1 &lt;= firsti &lt;= lasti &lt;= n</span><br><span class="line">1 &lt;= seatsi &lt;= 10 ** 4</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
-<li>问题转换：<ol>
-<li>某公交有<code>n</code>站，第<code>i</code>条记录 <code>bookings[i] = [i, j, k]</code>，表示在 <code>i</code> 站上车 <code>k</code>人，乘坐到<code>j</code>站，在<code>j + 1</code> 站下车，需要按照车站顺序返回每一站车上人数；</li>
-<li>根据<code>1</code> 的思路，定义 <code>re_list</code> 列表记录每站人数。因为题目中站是从<code>1</code>记录，<code>re_list[i]</code> 表示第 <code>i + 1</code> 站。遍历<code>bookings</code>，<code>bookings[i] = [i, j, k]</code> 表示在 <code>i</code> 站增加 <code>k</code> 人，即 <code>re_list[i - 1] += k</code>，在 <code>j + 1</code> 站减少 <code>k</code> 人即<code>re_list[j] -= k</code></li>
-<li>遍历 <code>re_list</code> 列表，获取每站人数：每一站人数为前一站人数 + 当前站人数变化。<code>re_list[i] += re_list[i - 1]</code> </li>
-</ol>
-</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">corpFlightBookings</span>(<span class="params">self, bookings: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]], n: <span class="built_in">int</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = [<span class="number">0</span>] * n</span><br><span class="line">        <span class="keyword">for</span> booking <span class="keyword">in</span> bookings:</span><br><span class="line">            first = booking[<span class="number">0</span>]</span><br><span class="line">            last = booking[<span class="number">1</span>]</span><br><span class="line">            seats = booking[<span class="number">2</span>]</span><br><span class="line">            re_list[first - <span class="number">1</span>] += seats</span><br><span class="line">            <span class="keyword">if</span> last &lt; n:</span><br><span class="line">                re_list[last] -= seats</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            re_list[i] += re_list[i - <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    booking_list = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">10</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">20</span>], [<span class="number">2</span>, <span class="number">5</span>, <span class="number">25</span>]]</span><br><span class="line">    n_int = <span class="number">5</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.corpFlightBookings(booking_list, n_int)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<code>O(n)</code></li>
-<li>空间复杂度：<code>O(1)</code></li>
 </ul>
 ]]></content>
       <categories>
@@ -139,33 +170,6 @@
       </tags>
   </entry>
   <entry>
-    <title>345. 反转字符串中的元音字母</title>
-    <url>/2021/08/19/345.%20%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/</url>
-    <content><![CDATA[<p><strong>345. 反转字符串中的元音字母</strong></p>
-<span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编写一个函数，以字符串作为输入，反转该字符串中的元音字母。</span><br><span class="line">示例 1：</span><br><span class="line">输入：&quot;hello&quot;</span><br><span class="line">输出：&quot;holle&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：&quot;leetcode&quot;</span><br><span class="line">输出：&quot;leotcede&quot;</span><br><span class="line">提示：</span><br><span class="line">元音字母不包含字母 &quot;y&quot; 。</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
-<li>元音字母 <code>a</code>/<code>A</code>/<code>e</code>/<code>E</code>/<code>i</code>/<code>I</code>/<code>o</code>/<code>O</code>/<code>u</code>/<code>U</code><br>双指针：</li>
-</ul>
-<ol>
-<li>使用<code>python</code> 解题，字符串是不可变类型，不能直接在原字符串上做修改，需要将其转化为 <code>list</code>，最后再返回字符串；</li>
-<li>定义两个指针<code>i/j</code>，分别指向首位和末位，对指针所指向内容判断。如果<code>i</code> 对应内容不是元音字母，<code>i</code> 向右移动；如果<code>j</code> 对应内容不是元音字母，<code>j</code> 向左移动；</li>
-<li><code>i/j</code> 对应内容是元音字母且 <code>i &lt; j</code> ，则 <code>i/j</code> 对应内容交换，并且<code>i</code> 向右移动；<code>j</code> 向左移动。</li>
-</ol>
-<ul>
-<li>注意：本题元音字母包含大写字母。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseVowels</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        vowels = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot;A&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;I&quot;</span>, <span class="string">&quot;O&quot;</span>, <span class="string">&quot;U&quot;</span>]</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        j = <span class="built_in">len</span>(s) - <span class="number">1</span></span><br><span class="line">        s_list = <span class="built_in">list</span>(s)</span><br><span class="line">        <span class="keyword">while</span> i &lt; j:</span><br><span class="line">            <span class="keyword">if</span> s_list[i] <span class="keyword">not</span> <span class="keyword">in</span> vowels:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> s_list[j] <span class="keyword">not</span> <span class="keyword">in</span> vowels:</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            s_list[i], s_list[j] = s_list[j], s_list[i]</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(s_list)</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>343. 整数拆分</title>
     <url>/2021/08/20/343.%20%E6%95%B4%E6%95%B0%E6%8B%86%E5%88%86/</url>
     <content><![CDATA[<p><strong>343. 整数拆分</strong></p>
@@ -220,31 +224,22 @@
       </tags>
   </entry>
   <entry>
-    <title>524. 通过删除字母匹配到字典里最长单词</title>
-    <url>/2021/09/14/524.%20%E9%80%9A%E8%BF%87%E5%88%A0%E9%99%A4%E5%AD%97%E6%AF%8D%E5%8C%B9%E9%85%8D%E5%88%B0%E5%AD%97%E5%85%B8%E9%87%8C%E6%9C%80%E9%95%BF%E5%8D%95%E8%AF%8D/</url>
-    <content><![CDATA[<p><strong>524. 通过删除字母匹配到字典里最长单词</strong></p>
+    <title>345. 反转字符串中的元音字母</title>
+    <url>/2021/08/19/345.%20%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%85%83%E9%9F%B3%E5%AD%97%E6%AF%8D/</url>
+    <content><![CDATA[<p><strong>345. 反转字符串中的元音字母</strong></p>
 <span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你一个字符串 s 和一个字符串数组 dictionary 作为字典，找出并返回字典中最长的字符串，该字符串可以通过删除 s 中的某些字符得到。</span><br><span class="line">如果答案不止一个，返回长度最长且字典序最小的字符串。如果答案不存在，则返回空字符串。</span><br><span class="line">示例 1：</span><br><span class="line">输入：s = &quot;abpcplea&quot;, dictionary = [&quot;ale&quot;,&quot;apple&quot;,&quot;monkey&quot;,&quot;plea&quot;]</span><br><span class="line">输出：&quot;apple&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：s = &quot;abpcplea&quot;, dictionary = [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]</span><br><span class="line">输出：&quot;a&quot;</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= s.length &lt;= 1000</span><br><span class="line">1 &lt;= dictionary.length &lt;= 1000</span><br><span class="line">1 &lt;= dictionary[i].length &lt;= 1000</span><br><span class="line">s 和 dictionary[i] 仅由小写英文字母组成</span><br></pre></td></tr></table></figure>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编写一个函数，以字符串作为输入，反转该字符串中的元音字母。</span><br><span class="line">示例 1：</span><br><span class="line">输入：&quot;hello&quot;</span><br><span class="line">输出：&quot;holle&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：&quot;leetcode&quot;</span><br><span class="line">输出：&quot;leotcede&quot;</span><br><span class="line">提示：</span><br><span class="line">元音字母不包含字母 &quot;y&quot; 。</span><br></pre></td></tr></table></figure>
 
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>遍历判断 <code>dictionary</code> 中字符串是否是删除 <code>s</code> 中某些字符得到的；<ul>
-<li>判断第一步，使用双指针：</li>
-<li>初始化两个指针 <code>i</code> 和 <code>j</code>，贪心匹配。</li>
-<li>如果匹配成功（<code>i</code> 和 <code>j</code>所对应字符相等），<code>i</code> 和 <code>j</code>同时向后移；</li>
-<li>如果匹配失败，<code>i</code> 不变，<code>j</code> 向后移；</li>
-<li>遍历结束，如果 <code>i</code> 移动到字符串末尾，表示对应字符串可以通过 <code>s</code> 删除字母匹配到。</li>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>元音字母 <code>a</code>/<code>A</code>/<code>e</code>/<code>E</code>/<code>i</code>/<code>I</code>/<code>o</code>/<code>O</code>/<code>u</code>/<code>U</code><br>双指针：</li>
 </ul>
-</li>
-<li>根据第一步结果，获取长度最大且字典序最小的字符串<ul>
-<li>使用比较运算符判断</li>
-</ul>
-</li>
+<ol>
+<li>使用<code>python</code> 解题，字符串是不可变类型，不能直接在原字符串上做修改，需要将其转化为 <code>list</code>，最后再返回字符串；</li>
+<li>定义两个指针<code>i/j</code>，分别指向首位和末位，对指针所指向内容判断。如果<code>i</code> 对应内容不是元音字母，<code>i</code> 向右移动；如果<code>j</code> 对应内容不是元音字母，<code>j</code> 向左移动；</li>
+<li><code>i/j</code> 对应内容是元音字母且 <code>i &lt; j</code> ，则 <code>i/j</code> 对应内容交换，并且<code>i</code> 向右移动；<code>j</code> 向左移动。</li>
 </ol>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findLongestWord</span>(<span class="params">self, s: <span class="built_in">str</span>, dictionary: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        re_len = <span class="number">0</span></span><br><span class="line">        re_str = <span class="string">&quot;&quot;</span></span><br><span class="line">        s_len = <span class="built_in">len</span>(s)</span><br><span class="line">        <span class="keyword">for</span> one_str <span class="keyword">in</span> dictionary:</span><br><span class="line">            i_len = <span class="built_in">len</span>(one_str)</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            j = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> i &lt; i_len <span class="keyword">and</span> j &lt; s_len:</span><br><span class="line">                i_str = one_str[i]</span><br><span class="line">                j_str = s[j]</span><br><span class="line">                <span class="keyword">if</span> i_str == j_str:</span><br><span class="line">                    i += <span class="number">1</span></span><br><span class="line">                j += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> i == i_len <span class="keyword">and</span> re_len &lt;= i_len:</span><br><span class="line">                <span class="keyword">if</span> re_len == i_len <span class="keyword">and</span> re_str &lt; one_str:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                re_str = one_str</span><br><span class="line">                re_len = i_len</span><br><span class="line">        <span class="keyword">return</span> re_str</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    s_str = <span class="string">&quot;abce&quot;</span></span><br><span class="line">    dict_list = [<span class="string">&quot;abe&quot;</span>, <span class="string">&quot;abc&quot;</span>]</span><br><span class="line">    s_ = Solution()</span><br><span class="line">    result = s_.findLongestWord(s_str, dict_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<code>O(d * (m + n))</code>。<code>d</code> 表示<code>dictionary</code>的长度，<code>m</code> 表示 <code>s</code> 的长度，<code>n</code> 表示 <code>dictionary</code> 中字符串平均长度。</li>
-<li>空间复杂度：<code>O(1)</code></li>
+<ul>
+<li>注意：本题元音字母包含大写字母。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseVowels</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        vowels = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot;A&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;I&quot;</span>, <span class="string">&quot;O&quot;</span>, <span class="string">&quot;U&quot;</span>]</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        j = <span class="built_in">len</span>(s) - <span class="number">1</span></span><br><span class="line">        s_list = <span class="built_in">list</span>(s)</span><br><span class="line">        <span class="keyword">while</span> i &lt; j:</span><br><span class="line">            <span class="keyword">if</span> s_list[i] <span class="keyword">not</span> <span class="keyword">in</span> vowels:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> s_list[j] <span class="keyword">not</span> <span class="keyword">in</span> vowels:</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            s_list[i], s_list[j] = s_list[j], s_list[i]</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(s_list)</span><br></pre></td></tr></table></figure></li>
 </ul>
 ]]></content>
       <categories>
@@ -283,28 +278,95 @@
       </tags>
   </entry>
   <entry>
-    <title>541. 反转字符串 II</title>
-    <url>/2021/08/19/541.%20%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%20II/</url>
-    <content><![CDATA[<p><strong>541. 反转字符串 II</strong></p>
+    <title>503. 下一个更大元素 II</title>
+    <url>/2021/09/17/503.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20II/</url>
+    <content><![CDATA[<p><strong>503. 下一个更大元素 II</strong></p>
 <span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给定一个字符串 s 和一个整数 k，从字符串开头算起，每 2k 个字符反转前 k 个字符。</span><br><span class="line">如果剩余字符少于 k 个，则将剩余字符全部反转。</span><br><span class="line">如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。</span><br><span class="line">示例 1：</span><br><span class="line">输入：s = &quot;abcdefg&quot;, k = 2</span><br><span class="line">输出：&quot;bacdfeg&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：s = &quot;abcd&quot;, k = 2</span><br><span class="line">输出：&quot;bacd&quot;</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= s.length &lt;= 104</span><br><span class="line">s 仅由小写英文组成</span><br><span class="line">1 &lt;= k &lt;= 104</span><br></pre></td></tr></table></figure>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给定一个循环数组（最后一个元素的下一个元素是数组的第一个元素），输出每个元素的下一个更大元素。数字 x 的下一个更大的元素是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1。</span><br><span class="line">示例 1:</span><br><span class="line">输入: [1,2,1]</span><br><span class="line">输出: [2,-1,2]</span><br><span class="line">解释: 第一个 1 的下一个更大的数是 2；</span><br><span class="line">数字 2 找不到下一个更大的数；</span><br><span class="line">第二个 1 的下一个最大的数需要循环搜索，结果也是 2。</span><br><span class="line">注意: 输入数组的长度不会超过 10000。</span><br></pre></td></tr></table></figure>
 
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>注意：循环数组，如果需要对数组元素获取下一个更大的数，需要对原列表遍历两遍</li>
+<li>如果两遍遍历结束没有找到下一个更大的数，则不存在，则置为 <code>-1</code></li>
+<li>注意：第一次遍历需要将值判断后添加到栈中。</li>
+</ul>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElements</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        num_len = <span class="built_in">len</span>(nums)</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        re_list = [-<span class="number">1</span>] * num_len</span><br><span class="line">        new_list = []</span><br><span class="line">        num_dict = &#123;&#125;</span><br><span class="line">        <span class="keyword">while</span> i &lt; num_len:</span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            num_i = nums[i]</span><br><span class="line">            <span class="keyword">while</span> new_list:</span><br><span class="line">                index, last_num = new_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> last_num &gt;= num_i:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> last_num &lt; num_i:</span><br><span class="line">                    re_list[index] = num_i</span><br><span class="line">                    new_list.pop()</span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">0</span>:</span><br><span class="line">                new_list.append((i, num_i))</span><br><span class="line">            <span class="keyword">if</span> i == num_len - <span class="number">1</span>:</span><br><span class="line">                i = <span class="number">0</span></span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> new_list:</span><br><span class="line">            index, last_num = new_list.pop()</span><br><span class="line">            num_dict[index] = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_len):</span><br><span class="line">            re_list.append(num_dict[i])</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">3</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.nextGreaterElements(num_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>496. 下一个更大元素 I</title>
+    <url>/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/</url>
+    <content><![CDATA[<p><strong>496. 下一个更大元素 I</strong></p>
+<span id="more"></span>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你两个 没有重复元素 的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。</span><br><span class="line">请你找出 nums1 中每个元素在 nums2 中的下一个比其大的值。</span><br><span class="line">nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出 -1 。</span><br><span class="line">示例 1:</span><br><span class="line">输入: nums1 = [4,1,2], nums2 = [1,3,4,2].</span><br><span class="line">输出: [-1,3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 4 ，你无法在第二个数组中找到下一个更大的数字，因此输出 -1 。</span><br><span class="line">    对于 num1 中的数字 1 ，第二个数组中数字1右边的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">示例 2:</span><br><span class="line">输入: nums1 = [2,4], nums2 = [1,2,3,4].</span><br><span class="line">输出: [3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 4 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums1.length &lt;= nums2.length &lt;= 1000</span><br><span class="line">0 &lt;= nums1[i], nums2[i] &lt;= 10 ^ 4</span><br><span class="line">nums1和nums2中所有整数 互不相同</span><br><span class="line">nums1 中的所有整数同样出现在 nums2 中</span><br><span class="line">进阶：你可以设计一个时间复杂度为 O(nums1.length + nums2.length) 的解决方案吗？</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><ul>
+<li>使用两重循环遍历</li>
+</ul>
+<ol>
+<li>外层循环遍历 <code>nums1</code>，内层循环遍历 <code>nums2</code></li>
+<li>判断两层数据是否一致，如果一致，标记位置，然后继续遍历 <code>nums2</code>，获取右边第一个比 <code>num1</code> 大的数，如果遍历结束没有找到，记录 <code>-1</code></li>
+</ol>
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><ol>
+<li>遍历 <code>nums2</code>，获取每一个元素右边的第一个更大的值</li>
+<li>遍历 <code>nums1</code>，查找 <code>nums2_dict</code> 获取更大的值</li>
+</ol>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><h3 id="第一种-1"><a href="#第一种-1" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = []</span><br><span class="line">        <span class="keyword">for</span> num_1 <span class="keyword">in</span> nums1:</span><br><span class="line">            is_find = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">for</span> num_2 <span class="keyword">in</span> nums2:</span><br><span class="line">                <span class="keyword">if</span> num_1 == num_2:</span><br><span class="line">                    is_find = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">elif</span> is_find <span class="keyword">and</span> num_2 &gt; num_1:</span><br><span class="line">                    re_list.append(num_2)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                re_list.append(-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二种-1"><a href="#第二种-1" class="headerlink" title="第二种"></a>第二种</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        <span class="comment"># 1. 遍历 nums2，获取每一个元素右边的第一个更大的值</span></span><br><span class="line">        nums2_dict = &#123;&#125;</span><br><span class="line">        re_list = []</span><br><span class="line">        new_list = []</span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums2:</span><br><span class="line">            <span class="keyword">while</span> new_list:</span><br><span class="line">                last_num = new_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> last_num &gt; num:</span><br><span class="line">                    <span class="comment"># new_list.append(num)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                nums2_dict[last_num] = num</span><br><span class="line">                new_list.pop()</span><br><span class="line">            new_list.append(num)</span><br><span class="line">        <span class="keyword">while</span> new_list:</span><br><span class="line">            last_num = new_list.pop()</span><br><span class="line">            nums2_dict[last_num] = -<span class="number">1</span></span><br><span class="line">        <span class="comment"># 2. 遍历 nums1，查找nums2_dict 获取更大的值</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums1:</span><br><span class="line">            re_list.append(nums2_dict[num])</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list_1 = [<span class="number">2</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">3</span>]</span><br><span class="line">    num_list_2 = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">3</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.nextGreaterElement(num_list_1, num_list_2)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><h3 id="第一种-2"><a href="#第一种-2" class="headerlink" title="第一种"></a>第一种</h3><ul>
+<li>时间复杂度：<code>O(m * n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
+<li>空间复杂度：<code>O(1)</code></li>
+</ul>
+<h3 id="第二种-2"><a href="#第二种-2" class="headerlink" title="第二种"></a>第二种</h3><ul>
+<li>时间复杂度：<code>O(m + n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
+<li>空间复杂度：<code>O(n)</code>。其中 <code>n</code> 是 <code>nums2</code> 长度</li>
+</ul>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>524. 通过删除字母匹配到字典里最长单词</title>
+    <url>/2021/09/14/524.%20%E9%80%9A%E8%BF%87%E5%88%A0%E9%99%A4%E5%AD%97%E6%AF%8D%E5%8C%B9%E9%85%8D%E5%88%B0%E5%AD%97%E5%85%B8%E9%87%8C%E6%9C%80%E9%95%BF%E5%8D%95%E8%AF%8D/</url>
+    <content><![CDATA[<p><strong>524. 通过删除字母匹配到字典里最长单词</strong></p>
+<span id="more"></span>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你一个字符串 s 和一个字符串数组 dictionary 作为字典，找出并返回字典中最长的字符串，该字符串可以通过删除 s 中的某些字符得到。</span><br><span class="line">如果答案不止一个，返回长度最长且字典序最小的字符串。如果答案不存在，则返回空字符串。</span><br><span class="line">示例 1：</span><br><span class="line">输入：s = &quot;abpcplea&quot;, dictionary = [&quot;ale&quot;,&quot;apple&quot;,&quot;monkey&quot;,&quot;plea&quot;]</span><br><span class="line">输出：&quot;apple&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：s = &quot;abpcplea&quot;, dictionary = [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]</span><br><span class="line">输出：&quot;a&quot;</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= s.length &lt;= 1000</span><br><span class="line">1 &lt;= dictionary.length &lt;= 1000</span><br><span class="line">1 &lt;= dictionary[i].length &lt;= 1000</span><br><span class="line">s 和 dictionary[i] 仅由小写英文字母组成</span><br></pre></td></tr></table></figure>
 
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
-<li>使用<code>python</code> 解题，字符串是不可变类型，不能直接在原字符串上做修改，需要将其转化为 <code>list</code>，最后再返回字符串；</li>
-<li>对列表的每个<code>2k</code> 个字符反转前 <code>k</code> 个字符</li>
+<li>遍历判断 <code>dictionary</code> 中字符串是否是删除 <code>s</code> 中某些字符得到的；<ul>
+<li>判断第一步，使用双指针：</li>
+<li>初始化两个指针 <code>i</code> 和 <code>j</code>，贪心匹配。</li>
+<li>如果匹配成功（<code>i</code> 和 <code>j</code>所对应字符相等），<code>i</code> 和 <code>j</code>同时向后移；</li>
+<li>如果匹配失败，<code>i</code> 不变，<code>j</code> 向后移；</li>
+<li>遍历结束，如果 <code>i</code> 移动到字符串末尾，表示对应字符串可以通过 <code>s</code> 删除字母匹配到。</li>
+</ul>
+</li>
+<li>根据第一步结果，获取长度最大且字典序最小的字符串<ul>
+<li>使用比较运算符判断</li>
+</ul>
+</li>
 </ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseStr</span>(<span class="params">self, s: <span class="built_in">str</span>, k: <span class="built_in">int</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        s_list = <span class="built_in">list</span>(s)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(s_list), <span class="number">2</span> * k):</span><br><span class="line">            s_list[i: i + k] = s_list[i: i + k][::-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(s_list)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    s_str = <span class="string">&quot;abcdefg&quot;</span></span><br><span class="line">    k_int = <span class="number">2</span></span><br><span class="line">    s_ = Solution()</span><br><span class="line">    result = s_.reverseStr(s_str, k_int)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findLongestWord</span>(<span class="params">self, s: <span class="built_in">str</span>, dictionary: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        re_len = <span class="number">0</span></span><br><span class="line">        re_str = <span class="string">&quot;&quot;</span></span><br><span class="line">        s_len = <span class="built_in">len</span>(s)</span><br><span class="line">        <span class="keyword">for</span> one_str <span class="keyword">in</span> dictionary:</span><br><span class="line">            i_len = <span class="built_in">len</span>(one_str)</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            j = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> i &lt; i_len <span class="keyword">and</span> j &lt; s_len:</span><br><span class="line">                i_str = one_str[i]</span><br><span class="line">                j_str = s[j]</span><br><span class="line">                <span class="keyword">if</span> i_str == j_str:</span><br><span class="line">                    i += <span class="number">1</span></span><br><span class="line">                j += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> i == i_len <span class="keyword">and</span> re_len &lt;= i_len:</span><br><span class="line">                <span class="keyword">if</span> re_len == i_len <span class="keyword">and</span> re_str &lt; one_str:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                re_str = one_str</span><br><span class="line">                re_len = i_len</span><br><span class="line">        <span class="keyword">return</span> re_str</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    s_str = <span class="string">&quot;abce&quot;</span></span><br><span class="line">    dict_list = [<span class="string">&quot;abe&quot;</span>, <span class="string">&quot;abc&quot;</span>]</span><br><span class="line">    s_ = Solution()</span><br><span class="line">    result = s_.findLongestWord(s_str, dict_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<ul>
-<li><code>O(n)</code>，其中<code>n</code> 是字符串 <code>s</code> 的长度。</li>
-</ul>
-</li>
-<li>空间复杂度：<ul>
-<li><code>O(n)</code>，因为使用编程语言是<code>python</code> ，字符串是不可变类型，所以需要<code>O(n)</code> 的空间将字符串转换为列表，即空间复杂度<code>O(n)</code>。</li>
-</ul>
-</li>
+<li>时间复杂度：<code>O(d * (m + n))</code>。<code>d</code> 表示<code>dictionary</code>的长度，<code>m</code> 表示 <code>s</code> 的长度，<code>n</code> 表示 <code>dictionary</code> 中字符串平均长度。</li>
+<li>空间复杂度：<code>O(1)</code></li>
 </ul>
 ]]></content>
       <categories>
@@ -362,24 +424,28 @@
       </tags>
   </entry>
   <entry>
-    <title>797. 所有可能的路径</title>
-    <url>/2021/08/25/797.%20%E6%89%80%E6%9C%89%E5%8F%AF%E8%83%BD%E7%9A%84%E8%B7%AF%E5%BE%84/</url>
-    <content><![CDATA[<p><strong>797. 所有可能的路径</strong></p>
+    <title>541. 反转字符串 II</title>
+    <url>/2021/08/19/541.%20%E5%8F%8D%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%20II/</url>
+    <content><![CDATA[<p><strong>541. 反转字符串 II</strong></p>
 <span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你一个有 n 个节点的 有向无环图（DAG），请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）</span><br><span class="line">二维数组的第 i 个数组中的单元都表示有向图中 i 号节点所能到达的下一些节点，空就是没有下一个结点了。</span><br><span class="line">译者注：有向图是有方向的，即规定了 a→b 你就不能从 b→a 。</span><br><span class="line">示例 1：</span><br><span class="line">输入：graph = [[1,2],[3],[3],[]]</span><br><span class="line">输出：[[0,1,3],[0,2,3]]</span><br><span class="line">解释：有两条路径 0 -&gt; 1 -&gt; 3 和 0 -&gt; 2 -&gt; 3</span><br><span class="line">示例 2：</span><br><span class="line">输入：graph = [[4,3,1],[3,2,4],[3],[4],[]]</span><br><span class="line">输出：[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]</span><br><span class="line">示例 3：</span><br><span class="line">输入：graph = [[1],[]]</span><br><span class="line">输出：[[0,1]]</span><br><span class="line">示例 4：</span><br><span class="line">输入：graph = [[1,2,3],[2],[3],[]]</span><br><span class="line">输出：[[0,1,2,3],[0,2,3],[0,3]]</span><br><span class="line">示例 5：</span><br><span class="line">输入：graph = [[1,3],[2],[3],[]]</span><br><span class="line">输出：[[0,1,2,3],[0,3]]</span><br><span class="line">提示：</span><br><span class="line">n == graph.length</span><br><span class="line">2 &lt;= n &lt;= 15</span><br><span class="line">0 &lt;= graph[i][j] &lt; n</span><br><span class="line">graph[i][j] != i（即，不存在自环）</span><br><span class="line">graph[i] 中的所有元素 互不相同</span><br><span class="line">保证输入为 有向无环图（DAG）</span><br></pre></td></tr></table></figure>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给定一个字符串 s 和一个整数 k，从字符串开头算起，每 2k 个字符反转前 k 个字符。</span><br><span class="line">如果剩余字符少于 k 个，则将剩余字符全部反转。</span><br><span class="line">如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。</span><br><span class="line">示例 1：</span><br><span class="line">输入：s = &quot;abcdefg&quot;, k = 2</span><br><span class="line">输出：&quot;bacdfeg&quot;</span><br><span class="line">示例 2：</span><br><span class="line">输入：s = &quot;abcd&quot;, k = 2</span><br><span class="line">输出：&quot;bacd&quot;</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= s.length &lt;= 104</span><br><span class="line">s 仅由小写英文组成</span><br><span class="line">1 &lt;= k &lt;= 104</span><br></pre></td></tr></table></figure>
 
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
-<li>采用 <code>DFS</code> 的思想。</li>
-<li>从第 <code>0</code> 节点开始往下深度优先搜索，判断是否到达第 <code>n - 1</code> 节点<ul>
-<li>如果到达，记录保存这条路径；</li>
-<li>如果没有，则往后回退，直到全部搜索完成。</li>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ol>
+<li>使用<code>python</code> 解题，字符串是不可变类型，不能直接在原字符串上做修改，需要将其转化为 <code>list</code>，最后再返回字符串；</li>
+<li>对列表的每个<code>2k</code> 个字符反转前 <code>k</code> 个字符</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseStr</span>(<span class="params">self, s: <span class="built_in">str</span>, k: <span class="built_in">int</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        s_list = <span class="built_in">list</span>(s)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(s_list), <span class="number">2</span> * k):</span><br><span class="line">            s_list[i: i + k] = s_list[i: i + k][::-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(s_list)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    s_str = <span class="string">&quot;abcdefg&quot;</span></span><br><span class="line">    k_int = <span class="number">2</span></span><br><span class="line">    s_ = Solution()</span><br><span class="line">    result = s_.reverseStr(s_str, k_int)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
+<li>时间复杂度：<ul>
+<li><code>O(n)</code>，其中<code>n</code> 是字符串 <code>s</code> 的长度。</li>
 </ul>
 </li>
+<li>空间复杂度：<ul>
+<li><code>O(n)</code>，因为使用编程语言是<code>python</code> ，字符串是不可变类型，所以需要<code>O(n)</code> 的空间将字符串转换为列表，即空间复杂度<code>O(n)</code>。</li>
 </ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allPathsSourceTarget</span>(<span class="params">self, graph: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        all_list = [[<span class="number">0</span>]]</span><br><span class="line">        new_list = []</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> all_list:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            list_ = all_list.pop()</span><br><span class="line">            last_num = list_[-<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">if</span> last_num == <span class="built_in">len</span>(graph) - <span class="number">1</span>:</span><br><span class="line">                new_list.append(list_)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">for</span> g <span class="keyword">in</span> graph[last_num]:</span><br><span class="line">                all_list.append(list_ + [g])</span><br><span class="line">        <span class="keyword">return</span> new_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    graph_list = [[<span class="number">4</span>, <span class="number">3</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>], [<span class="number">3</span>], [<span class="number">4</span>], []]</span><br><span class="line">    <span class="comment"># graph_list = [[2], [], [1]]</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.allPathsSourceTarget(graph_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<code>O(n ^ 2)</code></li>
-<li>空间复杂度：<code>O(n)</code></li>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -445,6 +511,35 @@
 <li><code>O(1)</code>，只使用常量的空间。</li>
 </ul>
 </li>
+</ul>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>797. 所有可能的路径</title>
+    <url>/2021/08/25/797.%20%E6%89%80%E6%9C%89%E5%8F%AF%E8%83%BD%E7%9A%84%E8%B7%AF%E5%BE%84/</url>
+    <content><![CDATA[<p><strong>797. 所有可能的路径</strong></p>
+<span id="more"></span>
+<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你一个有 n 个节点的 有向无环图（DAG），请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）</span><br><span class="line">二维数组的第 i 个数组中的单元都表示有向图中 i 号节点所能到达的下一些节点，空就是没有下一个结点了。</span><br><span class="line">译者注：有向图是有方向的，即规定了 a→b 你就不能从 b→a 。</span><br><span class="line">示例 1：</span><br><span class="line">输入：graph = [[1,2],[3],[3],[]]</span><br><span class="line">输出：[[0,1,3],[0,2,3]]</span><br><span class="line">解释：有两条路径 0 -&gt; 1 -&gt; 3 和 0 -&gt; 2 -&gt; 3</span><br><span class="line">示例 2：</span><br><span class="line">输入：graph = [[4,3,1],[3,2,4],[3],[4],[]]</span><br><span class="line">输出：[[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]</span><br><span class="line">示例 3：</span><br><span class="line">输入：graph = [[1],[]]</span><br><span class="line">输出：[[0,1]]</span><br><span class="line">示例 4：</span><br><span class="line">输入：graph = [[1,2,3],[2],[3],[]]</span><br><span class="line">输出：[[0,1,2,3],[0,2,3],[0,3]]</span><br><span class="line">示例 5：</span><br><span class="line">输入：graph = [[1,3],[2],[3],[]]</span><br><span class="line">输出：[[0,1,2,3],[0,3]]</span><br><span class="line">提示：</span><br><span class="line">n == graph.length</span><br><span class="line">2 &lt;= n &lt;= 15</span><br><span class="line">0 &lt;= graph[i][j] &lt; n</span><br><span class="line">graph[i][j] != i（即，不存在自环）</span><br><span class="line">graph[i] 中的所有元素 互不相同</span><br><span class="line">保证输入为 有向无环图（DAG）</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<li>采用 <code>DFS</code> 的思想。</li>
+<li>从第 <code>0</code> 节点开始往下深度优先搜索，判断是否到达第 <code>n - 1</code> 节点<ul>
+<li>如果到达，记录保存这条路径；</li>
+<li>如果没有，则往后回退，直到全部搜索完成。</li>
+</ul>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allPathsSourceTarget</span>(<span class="params">self, graph: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        all_list = [[<span class="number">0</span>]]</span><br><span class="line">        new_list = []</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> all_list:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            list_ = all_list.pop()</span><br><span class="line">            last_num = list_[-<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">if</span> last_num == <span class="built_in">len</span>(graph) - <span class="number">1</span>:</span><br><span class="line">                new_list.append(list_)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">for</span> g <span class="keyword">in</span> graph[last_num]:</span><br><span class="line">                all_list.append(list_ + [g])</span><br><span class="line">        <span class="keyword">return</span> new_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    graph_list = [[<span class="number">4</span>, <span class="number">3</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>], [<span class="number">3</span>], [<span class="number">4</span>], []]</span><br><span class="line">    <span class="comment"># graph_list = [[2], [], [1]]</span></span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.allPathsSourceTarget(graph_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
+<li>时间复杂度：<code>O(n ^ 2)</code></li>
+<li>空间复杂度：<code>O(n)</code></li>
 </ul>
 ]]></content>
       <categories>
@@ -699,29 +794,6 @@
       </tags>
   </entry>
   <entry>
-    <title>NPM 包管理器详解</title>
-    <url>/2021/08/13/NPM%20%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="NPM-包管理器详解"><a href="#NPM-包管理器详解" class="headerlink" title="NPM 包管理器详解"></a><code>NPM</code> 包管理器详解</h2><h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h3><ul>
-<li><code>npm</code>（<code>Node Package Manager</code>），<code>node</code>包管理器。</li>
-<li>是<code>Node.js</code>默认的，以<code>JavaScript</code>编写的软件包管理系统。</li>
-<li>官网：<code>https://www.npmjs.com</code><span id="more"></span>
-<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3></li>
-<li>官网下载<code>node.js</code>安装包：<code>http://nodejs.cn/</code></li>
-<li>直接安装，默认会安装<code>node.js</code>，<code>npm</code><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看安装版本</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br><span class="line"># 注：如果正常显示安装版本号，则说明安装成功。</span><br></pre></td></tr></table></figure>
-<h3 id="3-npm镜像切换"><a href="#3-npm镜像切换" class="headerlink" title="3. npm镜像切换"></a>3. <code>npm</code>镜像切换</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看npm 源</span><br><span class="line">npm config get registry</span><br><span class="line"># npm config get disturl</span><br><span class="line"># 设置npm为淘宝镜像</span><br><span class="line">1) 第一种</span><br><span class="line">npm config set registry https://registry.npm.taobao.org --global</span><br><span class="line">npm config set disturl https://npm.taobao.org/dist --global</span><br><span class="line"># --global 表示设置为全局镜像</span><br><span class="line">2) 第二种，使用nrm 工具设置淘宝镜像</span><br><span class="line">npx nrm use taobao</span><br><span class="line"># 需要切换官方源命令</span><br><span class="line">npx nrm use npm</span><br><span class="line"></span><br><span class="line"># 可以使用淘宝定制的cnpm(gzip 压缩支持)命令行工具代替默认的npm</span><br><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
-<h3 id="4-基本命令"><a href="#4-基本命令" class="headerlink" title="4. 基本命令"></a>4. 基本命令</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看版本，npm是否安装成功</span><br><span class="line">npm -v</span><br><span class="line"># 安装模块(默认安装最新版本)</span><br><span class="line">npm install 模块名</span><br><span class="line"># 全局安装模块</span><br><span class="line">npm install 模块名 -g</span><br><span class="line"># 查看所有全局安装的模块</span><br><span class="line">npm list -g</span><br><span class="line"># 查看某个模块的版本号</span><br><span class="line">npm list 模块名</span><br><span class="line"># 安装或更新指定模块到特定版本号</span><br><span class="line">npm -g install 模块名@版本号</span><br><span class="line"># 更新版本到最新版本</span><br><span class="line">npm update 模块名</span><br><span class="line"># 删除模块</span><br><span class="line">npm uninstall 模块名</span><br><span class="line"># -save 在 package 文件的dependencies 节点写入依赖</span><br><span class="line">npm install -save 模块名</span><br><span class="line"># -save-dev 在 package 文件的 devDependencies 节点写入依赖。</span><br><span class="line"># dependencies: 运行时的依赖，发布后，即生产环境下还需要用的模块</span><br><span class="line">npm install -save-dev 模块名</span><br><span class="line"># devDependencies: 开发时的依赖。里面的模块是开发时用的，发布时用不到，如：gulp、压缩css、js模块，这部分模块在项目部署后是不需要的。</span><br></pre></td></tr></table></figure>
-<h3 id="5-package-json-属性说明"><a href="#5-package-json-属性说明" class="headerlink" title="5. package.json 属性说明"></a>5. <code>package.json</code> 属性说明</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name -- 包名</span><br><span class="line">version -- 包的版本号</span><br><span class="line"># 版本号说明</span><br><span class="line">5.0.3  表示安装指定5.0.3 版本</span><br><span class="line">~5.0.3 表示安装5.0.x中最新的版本</span><br><span class="line">^5.0.3 表示安装5.x.x中最新的版本</span><br><span class="line">description -- 包的描述</span><br><span class="line">homepage -- 包的官网 url</span><br><span class="line">author -- 包的作者</span><br><span class="line">contributors -- 包的其他贡献者姓名</span><br><span class="line">dependencies -- 依赖包列表。如果依赖包没有安装，npm会自动将依赖的包安装在 node_module 目录上</span><br><span class="line">main -- 指定程序的主入口文件，require(&quot;moduleName&quot;)就会加载这个文件。这个字段的默认值是模块根目录下面的index.js</span><br><span class="line">keywords -- 关键字</span><br><span class="line"></span><br><span class="line">&#123;  </span><br><span class="line">  &quot;name&quot;: &quot;test&quot;,  </span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,  </span><br><span class="line">  &quot;description&quot;: &quot;test--&gt;package&quot;,  </span><br><span class="line">  &quot;main&quot;: &quot;index.js&quot;,  </span><br><span class="line">  &quot;scripts&quot;: &#123;  </span><br><span class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;  &#125;,  </span><br><span class="line">  &quot;keywords&quot;: [  </span><br><span class="line">    &quot;test&quot;  </span><br><span class="line">  ],  </span><br><span class="line">  &quot;author&quot;: &quot;xiaopang&quot;,  </span><br><span class="line">  &quot;license&quot;: &quot;ISC&quot;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="6-npm-安装包的使用"><a href="#6-npm-安装包的使用" class="headerlink" title="6. npm 安装包的使用"></a>6. npm 安装包的使用</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 第一种，使用搜索定位包的路径手动添加到使用的文件中</span><br><span class="line"># 如：使用jquery包</span><br><span class="line">&lt;script src=&quot;./node_modules/jquery/dist/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"># 第二种，使用webpack</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>NPM</category>
-      </categories>
-      <tags>
-        <tag>npm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>NLTK 模块详解</title>
     <url>/2021/08/13/NLTK%20%E6%A8%A1%E5%9D%97%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="NLTK-模块详解"><a href="#NLTK-模块详解" class="headerlink" title="NLTK 模块详解"></a>NLTK 模块详解</h2><h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><ul>
@@ -752,6 +824,29 @@
       <tags>
         <tag>python</tag>
         <tag>NLTK</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NPM 包管理器详解</title>
+    <url>/2021/08/13/NPM%20%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="NPM-包管理器详解"><a href="#NPM-包管理器详解" class="headerlink" title="NPM 包管理器详解"></a><code>NPM</code> 包管理器详解</h2><h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h3><ul>
+<li><code>npm</code>（<code>Node Package Manager</code>），<code>node</code>包管理器。</li>
+<li>是<code>Node.js</code>默认的，以<code>JavaScript</code>编写的软件包管理系统。</li>
+<li>官网：<code>https://www.npmjs.com</code><span id="more"></span>
+<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3></li>
+<li>官网下载<code>node.js</code>安装包：<code>http://nodejs.cn/</code></li>
+<li>直接安装，默认会安装<code>node.js</code>，<code>npm</code><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看安装版本</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br><span class="line"># 注：如果正常显示安装版本号，则说明安装成功。</span><br></pre></td></tr></table></figure>
+<h3 id="3-npm镜像切换"><a href="#3-npm镜像切换" class="headerlink" title="3. npm镜像切换"></a>3. <code>npm</code>镜像切换</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看npm 源</span><br><span class="line">npm config get registry</span><br><span class="line"># npm config get disturl</span><br><span class="line"># 设置npm为淘宝镜像</span><br><span class="line">1) 第一种</span><br><span class="line">npm config set registry https://registry.npm.taobao.org --global</span><br><span class="line">npm config set disturl https://npm.taobao.org/dist --global</span><br><span class="line"># --global 表示设置为全局镜像</span><br><span class="line">2) 第二种，使用nrm 工具设置淘宝镜像</span><br><span class="line">npx nrm use taobao</span><br><span class="line"># 需要切换官方源命令</span><br><span class="line">npx nrm use npm</span><br><span class="line"></span><br><span class="line"># 可以使用淘宝定制的cnpm(gzip 压缩支持)命令行工具代替默认的npm</span><br><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<h3 id="4-基本命令"><a href="#4-基本命令" class="headerlink" title="4. 基本命令"></a>4. 基本命令</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 查看版本，npm是否安装成功</span><br><span class="line">npm -v</span><br><span class="line"># 安装模块(默认安装最新版本)</span><br><span class="line">npm install 模块名</span><br><span class="line"># 全局安装模块</span><br><span class="line">npm install 模块名 -g</span><br><span class="line"># 查看所有全局安装的模块</span><br><span class="line">npm list -g</span><br><span class="line"># 查看某个模块的版本号</span><br><span class="line">npm list 模块名</span><br><span class="line"># 安装或更新指定模块到特定版本号</span><br><span class="line">npm -g install 模块名@版本号</span><br><span class="line"># 更新版本到最新版本</span><br><span class="line">npm update 模块名</span><br><span class="line"># 删除模块</span><br><span class="line">npm uninstall 模块名</span><br><span class="line"># -save 在 package 文件的dependencies 节点写入依赖</span><br><span class="line">npm install -save 模块名</span><br><span class="line"># -save-dev 在 package 文件的 devDependencies 节点写入依赖。</span><br><span class="line"># dependencies: 运行时的依赖，发布后，即生产环境下还需要用的模块</span><br><span class="line">npm install -save-dev 模块名</span><br><span class="line"># devDependencies: 开发时的依赖。里面的模块是开发时用的，发布时用不到，如：gulp、压缩css、js模块，这部分模块在项目部署后是不需要的。</span><br></pre></td></tr></table></figure>
+<h3 id="5-package-json-属性说明"><a href="#5-package-json-属性说明" class="headerlink" title="5. package.json 属性说明"></a>5. <code>package.json</code> 属性说明</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name -- 包名</span><br><span class="line">version -- 包的版本号</span><br><span class="line"># 版本号说明</span><br><span class="line">5.0.3  表示安装指定5.0.3 版本</span><br><span class="line">~5.0.3 表示安装5.0.x中最新的版本</span><br><span class="line">^5.0.3 表示安装5.x.x中最新的版本</span><br><span class="line">description -- 包的描述</span><br><span class="line">homepage -- 包的官网 url</span><br><span class="line">author -- 包的作者</span><br><span class="line">contributors -- 包的其他贡献者姓名</span><br><span class="line">dependencies -- 依赖包列表。如果依赖包没有安装，npm会自动将依赖的包安装在 node_module 目录上</span><br><span class="line">main -- 指定程序的主入口文件，require(&quot;moduleName&quot;)就会加载这个文件。这个字段的默认值是模块根目录下面的index.js</span><br><span class="line">keywords -- 关键字</span><br><span class="line"></span><br><span class="line">&#123;  </span><br><span class="line">  &quot;name&quot;: &quot;test&quot;,  </span><br><span class="line">  &quot;version&quot;: &quot;1.0.0&quot;,  </span><br><span class="line">  &quot;description&quot;: &quot;test--&gt;package&quot;,  </span><br><span class="line">  &quot;main&quot;: &quot;index.js&quot;,  </span><br><span class="line">  &quot;scripts&quot;: &#123;  </span><br><span class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;  &#125;,  </span><br><span class="line">  &quot;keywords&quot;: [  </span><br><span class="line">    &quot;test&quot;  </span><br><span class="line">  ],  </span><br><span class="line">  &quot;author&quot;: &quot;xiaopang&quot;,  </span><br><span class="line">  &quot;license&quot;: &quot;ISC&quot;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-npm-安装包的使用"><a href="#6-npm-安装包的使用" class="headerlink" title="6. npm 安装包的使用"></a>6. npm 安装包的使用</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 第一种，使用搜索定位包的路径手动添加到使用的文件中</span><br><span class="line"># 如：使用jquery包</span><br><span class="line">&lt;script src=&quot;./node_modules/jquery/dist/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"># 第二种，使用webpack</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>NPM</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
       </tags>
   </entry>
   <entry>
@@ -809,6 +904,30 @@
       </categories>
       <tags>
         <tag>neo4j</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 主动抛出异常、自定义异常</title>
+    <url>/2021/08/13/Python%20%E4%B8%BB%E5%8A%A8%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8/</url>
+    <content><![CDATA[<h2 id="Python-主动抛出异常、自定义异常"><a href="#Python-主动抛出异常、自定义异常" class="headerlink" title="Python 主动抛出异常、自定义异常"></a>Python 主动抛出异常、自定义异常</h2><h3 id="1-抛出异常"><a href="#1-抛出异常" class="headerlink" title="1. 抛出异常"></a>1. 抛出异常</h3><h4 id="1-1-raise"><a href="#1-1-raise" class="headerlink" title="1.1 raise"></a>1.1 raise</h4><ul>
+<li><code>raise</code> 指定要抛出的异常。</li>
+<li>对应参数必须是异常的实例或是异常的类（<code>Exception</code>）<span id="more"></span>
+例：<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span>(<span class="params">x</span>):</span>  </span><br><span class="line">    <span class="keyword">if</span> x &gt; <span class="number">5</span>:  </span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">f&quot;x 不能大于 5，x=<span class="subst">&#123;x&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Traceback (most recent call last):</span></span><br><span class="line"><span class="string">  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span></span><br><span class="line"><span class="string">  File &quot;&lt;stdin&gt;&quot;, line 3, in fun</span></span><br><span class="line"><span class="string">Exception: x 不能大于 5，x=7</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-2-assert"><a href="#1-2-assert" class="headerlink" title="1.2 assert"></a>1.2 assert</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">assert condition</span><br><span class="line"># condition 为真，不做任何事情</span><br><span class="line"># condition 为假，抛出AssertionError异常</span><br><span class="line"># 等价于：</span><br><span class="line">if not condition:  </span><br><span class="line">    raise AssertionError()</span><br></pre></td></tr></table></figure>
+<h3 id="2-自定义异常"><a href="#2-自定义异常" class="headerlink" title="2. 自定义异常"></a>2. 自定义异常</h3></li>
+<li>自定义类异常必须继承 <code>Exception</code></li>
+</ul>
+<p>自定义异常：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySQLError</span>(<span class="params">Exception</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, error_info</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MySQLError, self).__init__(error_info)</span><br><span class="line">        self.error_info = error_info</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.error_inf</span><br></pre></td></tr></table></figure>
+<p>使用自定义异常：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> MySQLError(<span class="string">&#x27;异常&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> MySQLError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>raise</tag>
       </tags>
   </entry>
   <entry>
@@ -908,30 +1027,6 @@
       </categories>
       <tags>
         <tag>nginx1</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python 主动抛出异常、自定义异常</title>
-    <url>/2021/08/13/Python%20%E4%B8%BB%E5%8A%A8%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8/</url>
-    <content><![CDATA[<h2 id="Python-主动抛出异常、自定义异常"><a href="#Python-主动抛出异常、自定义异常" class="headerlink" title="Python 主动抛出异常、自定义异常"></a>Python 主动抛出异常、自定义异常</h2><h3 id="1-抛出异常"><a href="#1-抛出异常" class="headerlink" title="1. 抛出异常"></a>1. 抛出异常</h3><h4 id="1-1-raise"><a href="#1-1-raise" class="headerlink" title="1.1 raise"></a>1.1 raise</h4><ul>
-<li><code>raise</code> 指定要抛出的异常。</li>
-<li>对应参数必须是异常的实例或是异常的类（<code>Exception</code>）<span id="more"></span>
-例：<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span>(<span class="params">x</span>):</span>  </span><br><span class="line">    <span class="keyword">if</span> x &gt; <span class="number">5</span>:  </span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">f&quot;x 不能大于 5，x=<span class="subst">&#123;x&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Traceback (most recent call last):</span></span><br><span class="line"><span class="string">  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span></span><br><span class="line"><span class="string">  File &quot;&lt;stdin&gt;&quot;, line 3, in fun</span></span><br><span class="line"><span class="string">Exception: x 不能大于 5，x=7</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
-<h4 id="1-2-assert"><a href="#1-2-assert" class="headerlink" title="1.2 assert"></a>1.2 assert</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">assert condition</span><br><span class="line"># condition 为真，不做任何事情</span><br><span class="line"># condition 为假，抛出AssertionError异常</span><br><span class="line"># 等价于：</span><br><span class="line">if not condition:  </span><br><span class="line">    raise AssertionError()</span><br></pre></td></tr></table></figure>
-<h3 id="2-自定义异常"><a href="#2-自定义异常" class="headerlink" title="2. 自定义异常"></a>2. 自定义异常</h3></li>
-<li>自定义类异常必须继承 <code>Exception</code></li>
-</ul>
-<p>自定义异常：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySQLError</span>(<span class="params">Exception</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, error_info</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MySQLError, self).__init__(error_info)</span><br><span class="line">        self.error_info = error_info</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.error_inf</span><br></pre></td></tr></table></figure>
-<p>使用自定义异常：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> MySQLError(<span class="string">&#x27;异常&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> MySQLError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>raise</tag>
       </tags>
   </entry>
   <entry>
@@ -1307,101 +1402,6 @@
       <tags>
         <tag>python</tag>
         <tag>neo4j</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>162. 寻找峰值</title>
-    <url>/2021/09/15/162.%20%E5%AF%BB%E6%89%BE%E5%B3%B0%E5%80%BC/</url>
-    <content><![CDATA[<p><strong>162. 寻找峰值</strong></p>
-<span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">峰值元素是指其值严格大于左右相邻值的元素。</span><br><span class="line">给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。</span><br><span class="line">你可以假设 nums[-1] = nums[n] = -∞ 。</span><br><span class="line">你必须实现时间复杂度为 O(log n) 的算法来解决此问题。</span><br><span class="line">示例 1：</span><br><span class="line">输入：nums = [1,2,3,1]</span><br><span class="line">输出：2</span><br><span class="line">解释：3 是峰值元素，你的函数应该返回其索引 2。</span><br><span class="line">示例 2：</span><br><span class="line">输入：nums = [1,2,1,3,5,6,4]</span><br><span class="line">输出：1 或 5</span><br><span class="line">解释：你的函数可以返回索引 1，其峰值元素为 2；</span><br><span class="line">     或者返回索引 5， 其峰值元素为 6。</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums.length &lt;= 1000</span><br><span class="line">-2 ^ 31 &lt;= nums[i] &lt;= 2 ^ 31 - 1</span><br><span class="line">对于所有有效的 i 都有 nums[i] != nums[i + 1]</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
-<li>题目描述：<code>nums[-1] = nums[n] = -∞</code>，且 <code>nums.length &gt;= 1</code>，所以列表 <code>list</code> 一定存在峰值</li>
-<li>左边/右边索引 <code>l</code>/ <code>r</code>中间位置索引 <code>mid = (l + r) // 2</code>，判断 <code>nums[mid]</code> 与 <code>nums[mid + 1]</code> 的值<ul>
-<li>如果 <code>nums[mid] &lt; nums[mid + 1]</code>，则 <code>mid</code> 右侧一定存在峰值（左侧不一定存在），即 <code>l = mid + 1</code></li>
-<li>如果 <code>nums[mid] &gt; nums[mid + 1]</code>, 则 <code>mid</code> 左侧一定存在峰值（包含 <code>mid</code>），即 <code>r = mid</code></li>
-</ul>
-</li>
-<li>如果 <code>l == r</code>，则索引 <code>l</code> 位置对应元素是峰值</li>
-</ul>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findPeakElement</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        n_len = <span class="built_in">len</span>(nums)</span><br><span class="line">        l = <span class="number">0</span></span><br><span class="line">        r = n_len - <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">            <span class="keyword">if</span> l == r:</span><br><span class="line">                <span class="keyword">return</span> l</span><br><span class="line">            mid = (l + r) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> nums[mid] &lt; nums[mid + <span class="number">1</span>]:</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                r = mid</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.findPeakElement(num_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><ul>
-<li>时间复杂度：<code>O(log n)</code></li>
-<li>空间复杂度：<code>O(1)</code></li>
-</ul>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>503. 下一个更大元素 II</title>
-    <url>/2021/09/17/503.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20II/</url>
-    <content><![CDATA[<p><strong>503. 下一个更大元素 II</strong></p>
-<span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给定一个循环数组（最后一个元素的下一个元素是数组的第一个元素），输出每个元素的下一个更大元素。数字 x 的下一个更大的元素是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1。</span><br><span class="line">示例 1:</span><br><span class="line">输入: [1,2,1]</span><br><span class="line">输出: [2,-1,2]</span><br><span class="line">解释: 第一个 1 的下一个更大的数是 2；</span><br><span class="line">数字 2 找不到下一个更大的数；</span><br><span class="line">第二个 1 的下一个最大的数需要循环搜索，结果也是 2。</span><br><span class="line">注意: 输入数组的长度不会超过 10000。</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
-<li>注意：循环数组，如果需要对数组元素获取下一个更大的数，需要对原列表遍历两遍</li>
-<li>如果两遍遍历结束没有找到下一个更大的数，则不存在，则置为 <code>-1</code></li>
-<li>注意：第一次遍历需要将值判断后添加到栈中。</li>
-</ul>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElements</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        num_len = <span class="built_in">len</span>(nums)</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        re_list = [-<span class="number">1</span>] * num_len</span><br><span class="line">        new_list = []</span><br><span class="line">        num_dict = &#123;&#125;</span><br><span class="line">        <span class="keyword">while</span> i &lt; num_len:</span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            num_i = nums[i]</span><br><span class="line">            <span class="keyword">while</span> new_list:</span><br><span class="line">                index, last_num = new_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> last_num &gt;= num_i:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> last_num &lt; num_i:</span><br><span class="line">                    re_list[index] = num_i</span><br><span class="line">                    new_list.pop()</span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">0</span>:</span><br><span class="line">                new_list.append((i, num_i))</span><br><span class="line">            <span class="keyword">if</span> i == num_len - <span class="number">1</span>:</span><br><span class="line">                i = <span class="number">0</span></span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> new_list:</span><br><span class="line">            index, last_num = new_list.pop()</span><br><span class="line">            num_dict[index] = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_len):</span><br><span class="line">            re_list.append(num_dict[i])</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">3</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.nextGreaterElements(num_list)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>496. 下一个更大元素 I</title>
-    <url>/2021/09/17/496.%20%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E5%85%83%E7%B4%A0%20I/</url>
-    <content><![CDATA[<p><strong>496. 下一个更大元素 I</strong></p>
-<span id="more"></span>
-<h2 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">给你两个 没有重复元素 的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。</span><br><span class="line">请你找出 nums1 中每个元素在 nums2 中的下一个比其大的值。</span><br><span class="line">nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出 -1 。</span><br><span class="line">示例 1:</span><br><span class="line">输入: nums1 = [4,1,2], nums2 = [1,3,4,2].</span><br><span class="line">输出: [-1,3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 4 ，你无法在第二个数组中找到下一个更大的数字，因此输出 -1 。</span><br><span class="line">    对于 num1 中的数字 1 ，第二个数组中数字1右边的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">示例 2:</span><br><span class="line">输入: nums1 = [2,4], nums2 = [1,2,3,4].</span><br><span class="line">输出: [3,-1]</span><br><span class="line">解释:</span><br><span class="line">    对于 num1 中的数字 2 ，第二个数组中的下一个较大数字是 3 。</span><br><span class="line">    对于 num1 中的数字 4 ，第二个数组中没有下一个更大的数字，因此输出 -1 。</span><br><span class="line">提示：</span><br><span class="line">1 &lt;= nums1.length &lt;= nums2.length &lt;= 1000</span><br><span class="line">0 &lt;= nums1[i], nums2[i] &lt;= 10 ^ 4</span><br><span class="line">nums1和nums2中所有整数 互不相同</span><br><span class="line">nums1 中的所有整数同样出现在 nums2 中</span><br><span class="line">进阶：你可以设计一个时间复杂度为 O(nums1.length + nums2.length) 的解决方案吗？</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><ul>
-<li>使用两重循环遍历</li>
-</ul>
-<ol>
-<li>外层循环遍历 <code>nums1</code>，内层循环遍历 <code>nums2</code></li>
-<li>判断两层数据是否一致，如果一致，标记位置，然后继续遍历 <code>nums2</code>，获取右边第一个比 <code>num1</code> 大的数，如果遍历结束没有找到，记录 <code>-1</code></li>
-</ol>
-<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><ol>
-<li>遍历 <code>nums2</code>，获取每一个元素右边的第一个更大的值</li>
-<li>遍历 <code>nums1</code>，查找 <code>nums2_dict</code> 获取更大的值</li>
-</ol>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><h3 id="第一种-1"><a href="#第一种-1" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        re_list = []</span><br><span class="line">        <span class="keyword">for</span> num_1 <span class="keyword">in</span> nums1:</span><br><span class="line">            is_find = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">for</span> num_2 <span class="keyword">in</span> nums2:</span><br><span class="line">                <span class="keyword">if</span> num_1 == num_2:</span><br><span class="line">                    is_find = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">elif</span> is_find <span class="keyword">and</span> num_2 &gt; num_1:</span><br><span class="line">                    re_list.append(num_2)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                re_list.append(-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br></pre></td></tr></table></figure>
-
-<h3 id="第二种-1"><a href="#第二种-1" class="headerlink" title="第二种"></a>第二种</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextGreaterElement</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        <span class="comment"># 1. 遍历 nums2，获取每一个元素右边的第一个更大的值</span></span><br><span class="line">        nums2_dict = &#123;&#125;</span><br><span class="line">        re_list = []</span><br><span class="line">        new_list = []</span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums2:</span><br><span class="line">            <span class="keyword">while</span> new_list:</span><br><span class="line">                last_num = new_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> last_num &gt; num:</span><br><span class="line">                    <span class="comment"># new_list.append(num)</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                nums2_dict[last_num] = num</span><br><span class="line">                new_list.pop()</span><br><span class="line">            new_list.append(num)</span><br><span class="line">        <span class="keyword">while</span> new_list:</span><br><span class="line">            last_num = new_list.pop()</span><br><span class="line">            nums2_dict[last_num] = -<span class="number">1</span></span><br><span class="line">        <span class="comment"># 2. 遍历 nums1，查找nums2_dict 获取更大的值</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums1:</span><br><span class="line">            re_list.append(nums2_dict[num])</span><br><span class="line">        <span class="keyword">return</span> re_list</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    num_list_1 = [<span class="number">2</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">3</span>]</span><br><span class="line">    num_list_2 = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">7</span>, <span class="number">3</span>]</span><br><span class="line">    s = Solution()</span><br><span class="line">    result = s.nextGreaterElement(num_list_1, num_list_2)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
-
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><h3 id="第一种-2"><a href="#第一种-2" class="headerlink" title="第一种"></a>第一种</h3><ul>
-<li>时间复杂度：<code>O(m * n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
-<li>空间复杂度：<code>O(1)</code></li>
-</ul>
-<h3 id="第二种-2"><a href="#第二种-2" class="headerlink" title="第二种"></a>第二种</h3><ul>
-<li>时间复杂度：<code>O(m + n)</code>。其中 <code>m</code> 是 <code>nums1</code> 长度，<code>n</code> 是 <code>nums2</code> 长度</li>
-<li>空间复杂度：<code>O(n)</code>。其中 <code>n</code> 是 <code>nums2</code> 长度</li>
-</ul>
-]]></content>
-      <categories>
-        <category>leetcode</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>python</tag>
       </tags>
   </entry>
 </search>
